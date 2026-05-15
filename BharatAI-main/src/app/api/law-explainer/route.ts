@@ -30,7 +30,7 @@ INSTRUCTIONS:
 
     const response =
       await deepseek.chat.completions.create({
-        model: "deepseek-chat",
+        model: "deepseek/meta-llama/llama-3.3-70b-instruct:free-v3-0324",
 
         messages: [
           {
