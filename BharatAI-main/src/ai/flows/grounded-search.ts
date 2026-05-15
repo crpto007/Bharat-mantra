@@ -9,7 +9,6 @@
  */
 
 import {ai} from '@/ai/genkit';
-import { googleAI } from '@genkit-ai/googleai';
 import {z} from 'genkit';
 
 const GroundedSearchSummarizationInputSchema = z.object({
@@ -37,9 +36,9 @@ export async function groundedSearchSummarization(
 
 const summarizeSourcesPrompt = ai.definePrompt({
   name: 'summarizeSourcesPrompt',
-   model:("googleai/gemini-2.0-flash"),
-  input: {schema: GroundedSearchSummarizationInputSchema},
-  output: {schema: GroundedSearchSummarizationOutputSchema},
+  model: 'googleai/gemini-2.0-flash',
+  input: { schema: GroundedSearchSummarizationInputSchema },
+  output: { schema: GroundedSearchSummarizationOutputSchema },
   prompt: `You are an AI assistant tasked with researching a topic and providing a summary.
 
   Perform a web search to research the topic thoroughly.
@@ -48,9 +47,9 @@ const summarizeSourcesPrompt = ai.definePrompt({
   Topic: {{{query}}}
 
   Please provide the summary in the following language: {{language}}. If the language is 'hi', respond in Hindi using Devanagari script.
-  
+
   The summary should include a comprehensive overview, key findings with detailed explanations, and a final conclusion.
-  
+
   Do not include or mention any source URLs in the summary.
   `,
 });
@@ -62,7 +61,7 @@ const groundedSearchSummarizationFlow = ai.defineFlow(
     outputSchema: GroundedSearchSummarizationOutputSchema,
   },
   async input => {
-    const {output} = await prompt(input);
+    const { output } = await summarizeSourcesPrompt(input);
     return output!;
   }
 );

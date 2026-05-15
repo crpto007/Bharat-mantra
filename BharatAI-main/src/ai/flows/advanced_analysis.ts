@@ -2,45 +2,62 @@
 
 /**
  * @fileOverview Performs advanced analysis on a given topic using multi-step reasoning.
- *
- * - advancedAnalysis - A function that performs the analysis.
- * - AdvancedAnalysisInput - The input type for the advancedAnalysis function.
- * - AdvancedAnalysisOutput - The return type for the advancedAnalysis function.
  */
 
-import {ai} from '@/ai/genkit';
-import { googleAI } from '@genkit-ai/googleai';
-import {z} from 'genkit';
+import { ai } from '@/ai/genkit';
+import { z } from 'genkit';
 
 const AdvancedAnalysisInputSchema = z.object({
-  query: z.string().describe('The complex query or topic for analysis.'),
-  language: z.string().describe('The language for the response (e.g., "en" for English, "hi" for Hindi).'),
+  query: z.string(),
+  language: z.string(),
 });
-export type AdvancedAnalysisInput = z.infer<typeof AdvancedAnalysisInputSchema>;
+
+export type AdvancedAnalysisInput = z.infer<
+  typeof AdvancedAnalysisInputSchema
+>;
 
 const AdvancedAnalysisOutputSchema = z.object({
-  analysis: z.string().describe('A detailed, long-form, and comprehensive analysis of the topic.'),
+  analysis: z.string(),
 });
-export type AdvancedAnalysisOutput = z.infer<typeof AdvancedAnalysisOutputSchema>;
 
-export async function advancedAnalysis(input: AdvancedAnalysisInput): Promise<AdvancedAnalysisOutput> {
+export type AdvancedAnalysisOutput = z.infer<
+  typeof AdvancedAnalysisOutputSchema
+>;
+
+export async function advancedAnalysis(
+  input: AdvancedAnalysisInput
+): Promise<AdvancedAnalysisOutput> {
   return advancedAnalysisFlow(input);
 }
 
 const prompt = ai.definePrompt({
   name: 'advancedAnalysisPrompt',
- model:("googleai/gemini-2.0-flash"),
-  input: {schema: AdvancedAnalysisInputSchema},
-  output: {schema: AdvancedAnalysisOutputSchema},
-  prompt: `You are an expert analyst. Your task is to perform a fully detailed, long-form, multi-step analysis of the following query.
-  Leverage all of your internal knowledge to provide the most comprehensive response possible.
-  Break down the problem, gather all available information, and synthesize it into a structured, long-form text response.
-  Provide a comprehensive overview, key findings with detailed explanations, and a final conclusion.
+  model: 'googleai/gemini-2.0-flash',
 
-  Please provide the analysis in the following language: {{language}}. If the language is 'hi', respond in Hindi using Devanagari script.
+  input: {
+    schema: AdvancedAnalysisInputSchema,
+  },
 
-  Query: {{{query}}}
-  `,
+  output: {
+    schema: AdvancedAnalysisOutputSchema,
+  },
+
+  prompt: `
+You are an expert analyst.
+
+Perform a deep, detailed, multi-step analysis of the following topic.
+
+Provide:
+- Overview
+- Key insights
+- Detailed explanation
+- Final conclusion
+
+Respond in this language: {{language}}
+
+Topic:
+{{{query}}}
+`,
 });
 
 const advancedAnalysisFlow = ai.defineFlow(
@@ -49,8 +66,22 @@ const advancedAnalysisFlow = ai.defineFlow(
     inputSchema: AdvancedAnalysisInputSchema,
     outputSchema: AdvancedAnalysisOutputSchema,
   },
-  async input => {
-    const {output} = await prompt(input);
-    return output!;
+
+  async (input) => {
+    try {
+      const { output } = await prompt(input);
+
+      return {
+        analysis:
+          output?.analysis || 'No analysis generated.',
+      };
+    } catch (error) {
+      console.error('Advanced Analysis Error:', error);
+
+      return {
+        analysis:
+          'AI service temporarily unavailable.',
+      };
+    }
   }
 );
