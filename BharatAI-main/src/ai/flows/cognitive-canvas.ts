@@ -29,7 +29,7 @@ export async function cognitiveCanvas(input: CognitiveCanvasInput): Promise<Cogn
 
 const prompt = ai.definePrompt({
   name: 'cognitiveCanvasPrompt',
-  model: googleAI.model('gemini-1.5-flash'),
+   model:("googleai/gemini-2.0-flash"),
   input: {schema: CognitiveCanvasInputSchema},
   output: {schema: CognitiveCanvasOutputSchema},
   prompt: `You are an expert AI brainstorming facilitator. Your task is to take a raw dump of text containing ideas, notes, and keywords, and transform it into a structured and insightful analysis.

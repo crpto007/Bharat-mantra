@@ -38,7 +38,7 @@ export default function GroundedSearchPage() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const SpeechRecognition = window.speechrecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition || typeof SpeechRecognition !== 'function') {
       toast({
         variant: 'destructive',
@@ -124,7 +124,6 @@ export default function GroundedSearchPage() {
 
     try {
       const response = await groundedSearchSummarization({ query, language });
-      query:prompt;
       setResult(response);
     } catch (error) {
       console.error(error);
@@ -137,7 +136,6 @@ export default function GroundedSearchPage() {
       setIsLoading(false);
     }
   };
-const [prompt, setPrompt] = useState("");
   return (
     <div className="flex-1 space-y-4">
       <PageHeader

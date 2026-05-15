@@ -33,7 +33,7 @@ export async function healthPlanner(input: HealthPlannerInput): Promise<HealthPl
 
 const prompt = ai.definePrompt({
   name: 'healthPlannerPrompt',
-  model: googleAI.model('gemini-1.5-flash'),
+   model:("googleai/gemini-2.0-flash"),
   input: {schema: HealthPlannerInputSchema},
   output: {schema: HealthPlannerOutputSchema},
   prompt: `You are an expert fitness coach and nutritionist. Create a comprehensive, personalized, and long-form weekly health plan based on the user's details.

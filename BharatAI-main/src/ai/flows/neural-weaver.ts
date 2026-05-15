@@ -29,7 +29,7 @@ export async function neuralWeaver(input: NeuralWeaverInput): Promise<NeuralWeav
 
 const prompt = ai.definePrompt({
   name: 'neuralWeaverPrompt',
-  model: googleAI.model('gemini-1.5-flash'),
+   model:("googleai/gemini-2.0-flash"),
   input: {schema: NeuralWeaverInputSchema},
   output: {schema: NeuralWeaverOutputSchema},
   prompt: `You are a master content synthesizer and editor, an expert at weaving disparate information into a seamless, insightful, and original narrative. Your task is to synthesize the provided source documents into a new, high-quality piece of content that achieves the user's specified goal.

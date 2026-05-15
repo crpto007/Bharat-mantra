@@ -29,7 +29,7 @@ export async function advancedAnalysis(input: AdvancedAnalysisInput): Promise<Ad
 
 const prompt = ai.definePrompt({
   name: 'advancedAnalysisPrompt',
-  model: googleAI.model('gemini-1.5-flash'),
+ model:("googleai/gemini-2.0-flash"),
   input: {schema: AdvancedAnalysisInputSchema},
   output: {schema: AdvancedAnalysisOutputSchema},
   prompt: `You are an expert analyst. Your task is to perform a fully detailed, long-form, multi-step analysis of the following query.

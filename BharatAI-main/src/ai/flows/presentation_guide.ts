@@ -33,7 +33,7 @@ export async function presentationGuide(input: PresentationGuideInput): Promise<
 
 const prompt = ai.definePrompt({
   name: 'presentationGuidePrompt',
-  model: googleAI.model('gemini-1.5-flash'),
+   model:("googleai/gemini-2.0-flash"),
   input: {schema: PresentationGuideInputSchema},
   output: {schema: PresentationGuideOutputSchema},
   prompt: `You are an expert presentation coach. Create a detailed presentation outline, a full script, and a series of image prompts for the given topic.

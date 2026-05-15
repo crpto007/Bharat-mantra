@@ -30,7 +30,7 @@ export async function documentGenerator(input: DocumentGeneratorInput): Promise<
 
 const prompt = ai.definePrompt({
   name: 'documentGeneratorPrompt',
-  model: googleAI.model('gemini-1.5-flash'),
+   model:("googleai/gemini-2.0-flash"),
   input: {schema: DocumentGeneratorInputSchema},
   output: {schema: DocumentGeneratorOutputSchema},
   prompt: `You are an AI assistant that specializes in generating formal legal documents.

@@ -33,7 +33,7 @@ export async function simplifyIndianLaw(input: SimplifyIndianLawInput): Promise<
 
 const simplifyIndianLawPrompt = ai.definePrompt({
   name: 'simplifyIndianLawPrompt',
-  model: googleAI.model('gemini-1.5-flash'),
+   model:("googleai/gemini-2.0-flash"),
   input: {schema: SimplifyIndianLawInputSchema},
   output: {schema: SimplifyIndianLawOutputSchema},
   prompt: `You are an expert in Indian law. Your task is to provide a fully detailed and comprehensive explanation of any Indian law, rule, or legal topic.

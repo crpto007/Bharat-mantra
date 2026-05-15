@@ -37,7 +37,7 @@ export async function groundedSearchSummarization(
 
 const summarizeSourcesPrompt = ai.definePrompt({
   name: 'summarizeSourcesPrompt',
-  model: googleAI.model('gemini-1.5-flash'),
+   model:("googleai/gemini-2.0-flash"),
   input: {schema: GroundedSearchSummarizationInputSchema},
   output: {schema: GroundedSearchSummarizationOutputSchema},
   prompt: `You are an AI assistant tasked with researching a topic and providing a summary.

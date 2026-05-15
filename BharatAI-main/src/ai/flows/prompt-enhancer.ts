@@ -28,7 +28,7 @@ export async function enhancePromptForChatbot(input: EnhancePromptForChatbotInpu
 
 const prompt = ai.definePrompt({
   name: 'enhancePromptForChatbotPrompt',
-  model: googleAI.model('gemini-1.5-flash'),
+   model:("googleai/gemini-2.0-flash"),
   input: {schema: EnhancePromptForChatbotInputSchema},
   output: {schema: EnhancePromptForChatbotOutputSchema},
   prompt: `You are an AI prompt engineering expert. Your task is to rewrite a user's prompt to be clearer, more specific, and highly effective, while remaining concise.

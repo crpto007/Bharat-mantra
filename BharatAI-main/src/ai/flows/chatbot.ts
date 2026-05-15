@@ -39,7 +39,7 @@ Instructions:
 `;
 
       const result = await ai.generate({
-        model: googleAI.model("gemini-1.5-flash"),
+         model:("googleai/gemini-2.0-flash"),
         prompt,
         config: {
           temperature: 0.7,
