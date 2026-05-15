@@ -48,7 +48,7 @@ IMAGE PROMPTS:
 
     const response =
       await deepseek.chat.completions.create({
-        model: "deepseek/meta-llama/llama-3.3-70b-instruct:free-v3-0324",
+        model: "meta-llama/llama-3.3-70b-instruct:free",
 
         messages: [
           {
