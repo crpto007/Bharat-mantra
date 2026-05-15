@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { chatbotMultilingualSupport } from "@/ai/flows/chatbot";
 
 export default function ChatbotPage() {
   const [message, setMessage] = useState("");
@@ -14,15 +13,26 @@ export default function ChatbotPage() {
     try {
       setLoading(true);
 
-      const result = await chatbotMultilingualSupport({
-        message,
-        language: "en",
-        context: "",
+      const res = await fetch("/api/chatbot", {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify({
+          message,
+          language: "en",
+          context: "",
+        }),
       });
 
-      setResponse(result.response);
+      const data = await res.json();
+
+      setResponse(data.response);
     } catch (error) {
       console.error(error);
+
       setResponse("Something went wrong.");
     } finally {
       setLoading(false);
@@ -32,7 +42,6 @@ export default function ChatbotPage() {
   return (
     <div className="min-h-screen bg-black text-white p-6">
       <div className="max-w-2xl mx-auto">
-
         <h1 className="text-3xl font-bold mb-6">
           BharatAI Chatbot
         </h1>
