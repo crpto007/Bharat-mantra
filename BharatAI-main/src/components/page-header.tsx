@@ -24,7 +24,7 @@ export function PageHeader({ title, description, children, className }: PageHead
   return (
     <header className={cn("flex flex-col gap-4 md:flex-row md:items-start md:justify-between p-6 pb-2", className)}>
       <div className="flex items-center gap-4">
-        <Image src="/icons/logo.png" alt="PragyanAI Logo" width={48} height={48} className="block" style={{ height: 'auto' }} />
+        <Image src="/icons/logo.png" alt="bharat-mantra Logo" width={48} height={48} className="block" style={{ height: 'auto' }} />
         <div className="space-y-1.5">
           <h1 className="font-headline text-2xl md:text-3xl font-bold tracking-tight">{title}</h1>
           {description && <p className="text-muted-foreground">{description}</p>}

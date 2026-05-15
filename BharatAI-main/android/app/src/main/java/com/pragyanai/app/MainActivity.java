@@ -1,4 +1,4 @@
-package com.pragyanai.app;
+package com.bharat-mantra.app;
 
 import com.getcapacitor.BridgeActivity;
 

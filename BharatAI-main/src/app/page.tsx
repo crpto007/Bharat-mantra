@@ -61,7 +61,7 @@ export default function Page() {
           >
             <Image
               src="/icons/logo.png"
-              alt="PragyanAI Logo"
+              alt="bharat-mantra Logo"
               width={80}
               height={80}
               priority
@@ -75,7 +75,7 @@ export default function Page() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="mt-6 text-5xl font-bold tracking-tighter text-white sm:text-6xl md:text-7xl"
           >
-            PragyanAI
+            bharat-mantra
           </motion.h1>
 
           <motion.p
@@ -116,7 +116,7 @@ export default function Page() {
           </h2>
 
           <p className="mt-2 text-gray-400">
-            From analysis to content creation, PragyanAI has you covered.
+            From analysis to content creation, bharat-mantra has you covered.
           </p>
 
           <ul className="mt-6 space-y-4">

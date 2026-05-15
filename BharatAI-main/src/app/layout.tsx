@@ -22,7 +22,7 @@ const lexend = Lexend({
 });
 
 export const metadata: Metadata = {
-  title: "PragyanAI",
+  title: "bharat-mantra",
   description: "AI-powered assistant for chat, prompts, and productivity",
   manifest: "/manifest.json",
 };

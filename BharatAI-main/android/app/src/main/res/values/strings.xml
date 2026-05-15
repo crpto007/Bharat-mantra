@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">PragyanAI</string>
-    <string name="title_activity_main">PragyanAI</string>
-    <string name="package_name">com.pragyanai.app</string>
-    <string name="custom_url_scheme">com.pragyanai.app</string>
+    <string name="app_name">bharat-mantra</string>
+    <string name="title_activity_main">bharat-mantra</string>
+    <string name="package_name">com.bharat-mantra.app</string>
+    <string name="custom_url_scheme">com.bharat-mantra.app</string>
 </resources>

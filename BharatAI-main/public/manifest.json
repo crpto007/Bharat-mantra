@@ -1,6 +1,6 @@
 {
-  "name": "PragyanAI",
-  "short_name": "PragyanAI",
+  "name": "bharat-mantra",
+  "short_name": "bharat-mantra",
   "description": "AI-powered assistant for chat, prompts, and productivity.",
   "start_url": "/",
   "display": "standalone",

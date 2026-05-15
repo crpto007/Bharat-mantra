@@ -65,9 +65,9 @@ export function AppSidebar() {
         <SidebarHeader>
            <div className="flex items-center justify-between p-2">
             <Link href="/" className="flex items-center gap-3 truncate">
-                <Image src="/icons/logo.png" alt="PragyanAI Logo" width={40} height={40} className="shrink-0" style={{ height: 'auto' }} />
+                <Image src="/icons/logo.png" alt="bharat-mantra Logo" width={40} height={40} className="shrink-0" style={{ height: 'auto' }} />
                 <span className="font-headline text-2xl font-semibold">
-                PragyanAI
+                bharat-mantra
                 </span>
             </Link>
             <SidebarTrigger className="ml-auto" />

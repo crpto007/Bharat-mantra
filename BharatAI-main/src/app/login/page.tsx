@@ -163,7 +163,7 @@ export default function LoginPage() {
         <Card className="w-full max-w-md bg-card/60 backdrop-blur-xl border-white/10 shadow-2xl shadow-black/40">
           <CardHeader className="text-center">
             <div className="flex justify-center mb-4">
-            <Image src="/icons/logo.png" alt="PragyanAI Logo" width={80} height={80} priority style={{ height: 'auto' }} />
+            <Image src="/icons/logo.png" alt="bharat-mantra Logo" width={80} height={80} priority style={{ height: 'auto' }} />
             </div>
             <CardTitle className="text-3xl font-bold font-headline">{isSignUp ? 'Create an Account' : 'Welcome Back'}</CardTitle>
             <CardDescription>{isSignUp ? 'Fill in the details to get started.' : 'Sign in to access your AI toolkit'}</CardDescription>

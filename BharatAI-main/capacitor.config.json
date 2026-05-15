@@ -1,6 +1,6 @@
 {
-  "appId": "com.pragyanai.app",
-  "appName": "PragyanAI",
+  "appId": "com.bharat-mantra.app",
+  "appName": "bharat-mantra",
   "webDir": "out",
   "bundledWebRuntime": false
 }
