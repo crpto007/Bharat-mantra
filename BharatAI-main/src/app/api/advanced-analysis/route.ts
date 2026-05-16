@@ -8,13 +8,7 @@ export async function POST(req: Request) {
     const prompt = `
 You are an expert analyst.
 
-Perform a deep, detailed, multi-step analysis of the following topic.
-
-Provide:
-- Overview
-- Key insights
-- Detailed explanation
-- Final conclusion
+Perform a deep detailed analysis.
 
 Respond in this language: ${body.language}
 
@@ -40,12 +34,12 @@ ${body.query}
         response.choices[0].message.content ||
         "No analysis generated.",
     });
-  } catch (error) {
-    console.error(error);
+  } catch (error: any) {
+    console.log(error);
 
     return NextResponse.json(
       {
-        analysis: "AI service temporarily unavailable.",
+        error: error.message,
       },
       {
         status: 500,
