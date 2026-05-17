@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createAIErrorResponse, generateAIText } from "@/lib/deepseek";
+import { generateAIText, getAIErrorMessage } from "@/lib/deepseek";
 
 export async function POST(req: Request) {
   try {
@@ -27,17 +27,25 @@ INSTRUCTIONS:
 - Use detailed explanation
 - Use Hindi if requested
 `;
-    const text = await generateAIText({
-      prompt,
+
+    const text = await generateAIText(prompt, {
       temperature: 0.6,
     });
 
     return NextResponse.json({
-      explanation: text || "No explanation generated.",
+      explanation: text,
     });
+
   } catch (error) {
     console.error(error);
 
-    return createAIErrorResponse(error, {});
+    return NextResponse.json(
+      {
+        explanation: getAIErrorMessage(error),
+      },
+      {
+        status: 500,
+      }
+    );
   }
 }

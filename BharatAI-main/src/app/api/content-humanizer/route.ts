@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createAIErrorResponse, generateAIText } from "@/lib/deepseek";
+import { generateAIText, getAIErrorMessage } from "@/lib/deepseek";
 
 export async function POST(req: Request) {
   try {
@@ -30,19 +30,25 @@ Instructions:
 Original Text:
 ${body.text}
 `;
-    const text = await generateAIText({
-      prompt,
+
+    const text = await generateAIText(prompt, {
       temperature: 0.8,
     });
 
     return NextResponse.json({
-      humanizedText: text || "No humanized text generated.",
+      humanizedText: text,
     });
+
   } catch (error) {
     console.error(error);
 
-    return createAIErrorResponse(error, {
-      humanizedText: "AI service temporarily unavailable.",
-    });
+    return NextResponse.json(
+      {
+        humanizedText: getAIErrorMessage(error),
+      },
+      {
+        status: 500,
+      }
+    );
   }
 }

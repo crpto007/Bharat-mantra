@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createAIErrorResponse, generateAIText } from "@/lib/deepseek";
+import { generateAIText, getAIErrorMessage } from "@/lib/deepseek";
 
 export async function POST(req: Request) {
   try {
@@ -40,17 +40,25 @@ INSTRUCTIONS:
 - Make response professional
 - Format cleanly in markdown
 `;
-    const text = await generateAIText({
-      prompt,
+
+    const text = await generateAIText(prompt, {
       temperature: 0.7,
     });
 
     return NextResponse.json({
-      plan: text || "No plan generated.",
+      plan: text,
     });
+
   } catch (error) {
     console.error(error);
 
-    return createAIErrorResponse(error, {});
+    return NextResponse.json(
+      {
+        plan: getAIErrorMessage(error),
+      },
+      {
+        status: 500,
+      }
+    );
   }
 }
