@@ -24,11 +24,8 @@ export default function Page() {
           method: "POST",
 
           headers: {
-  Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-  "Content-Type": "application/json",
-  "HTTP-Referer": "https://bharat-mantra.vercel.app",
-  "X-Title": "Bharat Mantra"
-},
+            "Content-Type": "application/json",
+          },
 
           body: JSON.stringify({
             docType,
