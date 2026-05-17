@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { deepseek } from "@/lib/deepseek";
+import { generateAIText, getAIErrorMessage } from "@/lib/deepseek";
 
 export async function POST(req: Request) {
   try {
@@ -15,35 +15,24 @@ Respond in this language: ${body.language}
 Topic:
 ${body.query}
 `;
-
-    const response = await deepseek.chat.completions.create({
-      model: "meta-llama/llama-3.3-70b-instruct:free",
-
-      messages: [
-        {
-          role: "user",
-          content: prompt,
-        },
-      ],
-
+    const text = await generateAIText({
+      prompt,
       temperature: 0.7,
     });
 
     return NextResponse.json({
-      analysis:
-        response.choices[0].message.content ||
-        "No analysis generated.",
+      analysis: text || "No analysis generated.",
     });
   } catch (error: any) {
     console.log(error);
 
     return NextResponse.json(
       {
-        error: error.message,
+        error: getAIErrorMessage(error),
       },
       {
         status: 500,
-      }
+      },
     );
   }
 }
