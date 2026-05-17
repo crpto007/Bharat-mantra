@@ -26,10 +26,25 @@ export default function Page() {
       const data = await postJson<{ humanizedText: string }, Record<string, unknown>>(
         "/api/content-humanizer",
         {
+<<<<<<< HEAD
           text,
           humanizeLevel,
           outputLength,
           language: "en",
+=======
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify({
+            text,
+            humanizeLevel,
+            outputLength,
+            language: "en",
+          }),
+>>>>>>> main
         }
       );
 

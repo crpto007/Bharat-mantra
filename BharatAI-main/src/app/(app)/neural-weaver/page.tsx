@@ -97,7 +97,19 @@ export default function Page() {
 
       const data = await postJson<{ synthesizedContent: string }, Record<string, unknown>>(
         "/api/neural-weaver",
+<<<<<<< HEAD
         formData
+=======
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify(formData),
+        }
+>>>>>>> main
       );
 
       setResult(

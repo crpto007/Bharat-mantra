@@ -15,9 +15,20 @@ export default function Page() {
     try {
       setLoading(true);
 
+<<<<<<< HEAD
       const data = await postJson<{ summary: string }, Record<string, unknown>>(
         "/api/grounded-search",
         {
+=======
+      const res = await fetch("/api/grounded-search", {
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json",
+          },
+
+        body: JSON.stringify({
+>>>>>>> main
           query,
           language,
         }

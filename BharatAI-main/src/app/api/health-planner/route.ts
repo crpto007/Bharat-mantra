@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
+<<<<<<< HEAD
 import { generateAIText, getAIErrorMessage } from "@/lib/ai";
+=======
+import { generateAIText, getAIErrorMessage } from "@/lib/deepseek";
+>>>>>>> main
 
 export async function POST(req: Request) {
   try {
@@ -41,12 +45,21 @@ INSTRUCTIONS:
 - Format cleanly in markdown
 `;
 
+<<<<<<< HEAD
     const text = await generateAIText({ prompt, temperature: 0.7 });
 
     return NextResponse.json({
       plan:
         text ||
         "No plan generated.",
+=======
+    const text = await generateAIText(prompt, {
+      temperature: 0.7,
+    });
+
+    return NextResponse.json({
+      plan: text,
+>>>>>>> main
     });
 
   } catch (error) {
@@ -54,8 +67,12 @@ INSTRUCTIONS:
 
     return NextResponse.json(
       {
+<<<<<<< HEAD
         error:
           getAIErrorMessage(error),
+=======
+        plan: getAIErrorMessage(error),
+>>>>>>> main
       },
       {
         status: 500,

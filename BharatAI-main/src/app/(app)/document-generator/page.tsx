@@ -22,9 +22,23 @@ export default function Page() {
       const data = await postJson<{ generatedDoc: string }, Record<string, unknown>>(
         "/api/document-generator",
         {
+<<<<<<< HEAD
           docType,
           details,
           language: "en",
+=======
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify({
+            docType,
+            details,
+            language: "en",
+          }),
+>>>>>>> main
         }
       );
 

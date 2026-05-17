@@ -45,7 +45,19 @@ export default function Page() {
 
       const data = await postJson<{ explanation: string }, Record<string, unknown>>(
         "/api/law-explainer",
+<<<<<<< HEAD
         formData
+=======
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify(formData),
+        }
+>>>>>>> main
       );
 
       setExplanation(data.explanation);

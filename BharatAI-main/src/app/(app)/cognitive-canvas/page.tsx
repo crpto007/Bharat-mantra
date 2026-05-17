@@ -25,8 +25,21 @@ export default function Page() {
       >(
         "/api/cognitive-canvas",
         {
+<<<<<<< HEAD
           rawText,
           language: "en",
+=======
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify({
+            rawText,
+            language: "en",
+          }),
+>>>>>>> main
         }
       );
 

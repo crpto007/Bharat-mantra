@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
+<<<<<<< HEAD
 import { generateAIText, getAIErrorMessage } from "@/lib/ai";
+=======
+import { generateAIText, getAIErrorMessage } from "@/lib/deepseek";
+>>>>>>> main
 
 export async function POST(req: Request) {
   try {
@@ -25,12 +29,21 @@ Instructions:
 - Do not include source URLs
 `;
 
+<<<<<<< HEAD
     const text = await generateAIText({ prompt, temperature: 0.7 });
 
     return NextResponse.json({
       summary:
         text ||
         "No summary generated.",
+=======
+    const text = await generateAIText(prompt, {
+      temperature: 0.7,
+    });
+
+    return NextResponse.json({
+      summary: text,
+>>>>>>> main
     });
 
   } catch (error) {
@@ -40,8 +53,12 @@ Instructions:
 
     return NextResponse.json(
       {
+<<<<<<< HEAD
         error: message,
         summary: message,
+=======
+        summary: getAIErrorMessage(error),
+>>>>>>> main
       },
       {
         status: 500,

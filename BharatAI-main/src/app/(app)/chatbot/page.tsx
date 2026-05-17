@@ -14,9 +14,20 @@ export default function ChatbotPage() {
     try {
       setLoading(true);
 
+<<<<<<< HEAD
       const data = await postJson<{ response: string }, Record<string, unknown>>(
         "/api/chatbot",
         {
+=======
+      const res = await fetch("/api/chatbot", {
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json",
+          },
+
+        body: JSON.stringify({
+>>>>>>> main
           message,
           language: "en",
           context: "",

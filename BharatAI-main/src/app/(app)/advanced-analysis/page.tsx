@@ -14,9 +14,20 @@ export default function Page() {
     try {
       setLoading(true);
 
+<<<<<<< HEAD
       const data = await postJson<{ analysis: string }, Record<string, unknown>>(
         "/api/advanced-analysis",
         {
+=======
+      const res = await fetch("/api/advanced-analysis", {
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json",
+          },
+
+        body: JSON.stringify({
+>>>>>>> main
           query,
           language: "en",
         }

@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
+<<<<<<< HEAD
 import { generateAIText, getAIErrorMessage } from "@/lib/ai";
+=======
+import { generateAIText, getAIErrorMessage } from "@/lib/deepseek";
+>>>>>>> main
 
 export async function POST(req: Request) {
   try {
@@ -46,7 +50,13 @@ IMAGE PROMPTS:
 3.
 `;
 
+<<<<<<< HEAD
     const text = await generateAIText({ prompt, temperature: 0.7 });
+=======
+    const text = await generateAIText(prompt, {
+      temperature: 0.7,
+    });
+>>>>>>> main
 
     const outlineMatch =
       text.match(
@@ -88,8 +98,12 @@ IMAGE PROMPTS:
 
     return NextResponse.json(
       {
+<<<<<<< HEAD
         error:
           getAIErrorMessage(error),
+=======
+        error: getAIErrorMessage(error),
+>>>>>>> main
       },
       {
         status: 500,

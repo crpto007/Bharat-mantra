@@ -51,7 +51,19 @@ export default function Page() {
 
       const data = await postJson<{ plan: string }, Record<string, unknown>>(
         "/api/health-planner",
+<<<<<<< HEAD
         formData
+=======
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify(formData),
+        }
+>>>>>>> main
       );
 
       setPlan(data.plan);

@@ -74,7 +74,19 @@ export default function Page() {
 
       const data = await postJson<PresentationGuideOutput, PresentationGuideInput>(
         "/api/presentation-guide",
+<<<<<<< HEAD
         formData
+=======
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify(formData),
+        }
+>>>>>>> main
       );
 
       setResult(data);
