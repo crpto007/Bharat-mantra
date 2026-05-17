@@ -1,57 +1,66 @@
 import OpenAI from "openai";
 
-const openRouterApiKey = process.env.OPENROUTER_API_KEY;
-const openRouterModel =
-  process.env.OPENROUTER_MODEL || "meta-llama/llama-3.3-70b-instruct:free";
-const appUrl =
-  process.env.NEXT_PUBLIC_APP_URL || "https://bharat-mantra.vercel.app";
+const openRouterApiKey =
+  process.env.OPENROUTER_API_KEY?.trim();
 
-let client: OpenAI | null = null;
+export const OPENROUTER_MODEL =
+  process.env.OPENROUTER_MODEL?.trim() ||
+  "meta-llama/llama-3.3-70b-instruct:free";
 
-function getClient() {
-  if (!openRouterApiKey) {
-    throw new Error(
-      "OPENROUTER_API_KEY is not configured. Add it to your server environment to enable AI features.",
-    );
-  }
+export const AI_CONFIGURATION_ERROR =
+  "AI service is not configured. Please set OPENROUTER_API_KEY on the server and restart the app.";
 
-  client ??= new OpenAI({
-    apiKey: openRouterApiKey,
-    baseURL: "https://openrouter.ai/api/v1",
-    defaultHeaders: {
-      "HTTP-Referer": appUrl,
-      "X-Title": "Bharat Mantra",
-    },
-  });
-
-  return client;
-}
-
-export async function generateAIText({
-  prompt,
-  temperature = 0.7,
-}: {
-  prompt: string;
-  temperature?: number;
-}) {
-  const response = await getClient().chat.completions.create({
-    model: openRouterModel,
-    messages: [
-      {
-        role: "user",
-        content: prompt,
-      },
-    ],
-    temperature,
-  });
-
-  return response.choices[0]?.message?.content?.trim() || "";
-}
+export const deepseek = new OpenAI({
+  apiKey: openRouterApiKey || "missing-openrouter-api-key",
+  baseURL: "https://openrouter.ai/api/v1",
+  defaultHeaders: {
+    "HTTP-Referer":
+      process.env.OPENROUTER_SITE_URL ||
+      "https://bharat-mantra.vercel.app",
+    "X-Title": "Bharat Mantra",
+  },
+});
 
 export function getAIErrorMessage(error: unknown) {
   if (error instanceof Error) {
     return error.message;
   }
 
-  return "AI service temporarily unavailable.";
+  return "AI service temporarily unavailable. Please try again.";
+}
+
+type GenerateTextOptions = {
+  temperature?: number;
+};
+
+export async function generateAIText(
+  prompt: string,
+  options: GenerateTextOptions = {}
+) {
+  if (!openRouterApiKey) {
+    throw new Error(AI_CONFIGURATION_ERROR);
+  }
+
+  const response =
+    await deepseek.chat.completions.create({
+      model: OPENROUTER_MODEL,
+      messages: [
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
+      temperature: options.temperature ?? 0.7,
+    });
+
+  const text =
+    response.choices[0]?.message.content?.trim();
+
+  if (!text) {
+    throw new Error(
+      "AI service returned an empty response. Please try again."
+    );
+  }
+
+  return text;
 }

@@ -16,23 +16,22 @@ ${body.context || "No previous context"}
 User message:
 ${body.message}
 `;
-    const text = await generateAIText({
-      prompt,
-    });
+
+    const text = await generateAIText(prompt);
 
     return NextResponse.json({
-      response: text || "No response generated.",
+      response: text,
     });
   } catch (error) {
     console.error(error);
 
     return NextResponse.json(
       {
-        error: getAIErrorMessage(error),
+        response: getAIErrorMessage(error),
       },
       {
         status: 500,
-      },
+      }
     );
   }
 }

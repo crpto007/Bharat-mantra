@@ -27,24 +27,25 @@ INSTRUCTIONS:
 - Use detailed explanation
 - Use Hindi if requested
 `;
-    const text = await generateAIText({
-      prompt,
+
+    const text = await generateAIText(prompt, {
       temperature: 0.6,
     });
 
     return NextResponse.json({
-      explanation: text || "No explanation generated.",
+      explanation: text,
     });
+
   } catch (error) {
     console.error(error);
 
     return NextResponse.json(
       {
-        error: getAIErrorMessage(error),
+        explanation: getAIErrorMessage(error),
       },
       {
         status: 500,
-      },
+      }
     );
   }
 }

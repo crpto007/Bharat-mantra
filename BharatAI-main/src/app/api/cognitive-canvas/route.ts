@@ -26,34 +26,33 @@ ORGANIZED CONTENT:
 SUGGESTIONS:
 ...
 `;
-    const text = await generateAIText({
-      prompt,
+
+    const text = await generateAIText(prompt, {
       temperature: 0.7,
     });
 
-    const formattedText = text || "";
-
-    const parts = formattedText.split("SUGGESTIONS:");
+    const parts = text.split("SUGGESTIONS:");
 
     return NextResponse.json({
       organizedContent:
         parts[0]?.replace("ORGANIZED CONTENT:", "") ||
         "No organized content generated.",
 
-      suggestions: parts[1] || "No suggestions generated.",
+      suggestions:
+        parts[1] || "No suggestions generated.",
     });
   } catch (error) {
     console.error(error);
 
     return NextResponse.json(
       {
-        error: getAIErrorMessage(error),
-        organizedContent: "AI service temporarily unavailable.",
+        organizedContent: getAIErrorMessage(error),
+
         suggestions: "",
       },
       {
         status: 500,
-      },
+      }
     );
   }
 }

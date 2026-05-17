@@ -24,25 +24,25 @@ Instructions:
 - Make response long and informative
 - Do not include source URLs
 `;
-    const text = await generateAIText({
-      prompt,
+
+    const text = await generateAIText(prompt, {
       temperature: 0.7,
     });
 
     return NextResponse.json({
-      summary: text || "No summary generated.",
+      summary: text,
     });
+
   } catch (error) {
     console.error(error);
 
     return NextResponse.json(
       {
-        error: getAIErrorMessage(error),
-        summary: "AI service temporarily unavailable.",
+        summary: getAIErrorMessage(error),
       },
       {
         status: 500,
-      },
+      }
     );
   }
 }
