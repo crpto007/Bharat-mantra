@@ -28,8 +28,14 @@ export default function RootLayout({
       </head>
       <body
         className={cn(
-          "min-h-screen bg-background font-body antialiased [--font-inter:Inter,ui-sans-serif,system-ui,sans-serif] [--font-lexend:Lexend,ui-sans-serif,system-ui,sans-serif]",
+          "min-h-screen bg-background font-body antialiased"
         )}
+        style={{
+          "--font-inter":
+            "Inter, ui-sans-serif, system-ui, sans-serif",
+          "--font-lexend":
+            "Lexend, ui-sans-serif, system-ui, sans-serif",
+        } as React.CSSProperties}
       >
         <div className="absolute inset-0 -z-10 h-full w-full bg-black bg-[linear-gradient(to_right,#161616_1px,transparent_1px),linear-gradient(to_bottom,#161616_1px,transparent_1px)] bg-[size:4rem_4rem]" />
         <div className="absolute top-0 z-[-2] h-screen w-screen bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,hsl(var(--primary)/0.15),rgba(255,255,255,0))]"></div>

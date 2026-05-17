@@ -1,9 +1,5 @@
 import { NextResponse } from "next/server";
-import {
-  generateAIText,
-  getAIErrorMessage,
-  getAIErrorStatus,
-} from "@/lib/deepseek";
+import { generateAIText, getAIErrorMessage } from "@/lib/deepseek";
 
 export async function POST(req: Request) {
   try {
@@ -39,20 +35,20 @@ IMPORTANT INSTRUCTIONS:
 - Match tone according to goal
 - Add conclusion at end
 `;
-    const text = await generateAIText({
-      prompt,
+
+    const text = await generateAIText(prompt, {
       temperature: 0.7,
     });
 
     return NextResponse.json({
-      synthesizedContent: text || "No content generated.",
+      synthesizedContent: text,
     });
   } catch (error) {
     console.error(error);
 
     return NextResponse.json(
       {
-        error: getAIErrorMessage(error),
+        synthesizedContent: getAIErrorMessage(error),
       },
       {
         status: getAIErrorStatus(error),

@@ -48,9 +48,9 @@ export default function Page() {
       const res = await fetch("/api/health-planner", {
         method: "POST",
 
-        headers: {
-          "Content-Type": "application/json",
-        },
+          headers: {
+            "Content-Type": "application/json",
+          },
 
         body: JSON.stringify(formData),
       });
