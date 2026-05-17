@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { deepseek } from "@/lib/deepseek";
+import { generateText } from "@/ai/flows/generate-text-flow";
+import { createAIErrorResponse } from "@/lib/deepseek";
 
 export async function POST(req: Request) {
   try {
@@ -24,38 +25,17 @@ Instructions:
 - Make response long and informative
 - Do not include source URLs
 `;
-
-    const response =
-      await deepseek.chat.completions.create({
-        model: "meta-llama/llama-3.3-70b-instruct:free",
-
-        messages: [
-          {
-            role: "user",
-            content: prompt,
-          },
-        ],
-
-        temperature: 0.7,
-      });
-
-    return NextResponse.json({
-      summary:
-        response.choices[0].message.content ||
-        "No summary generated.",
+    const text = await generateText({
+      prompt,
+      temperature: 0.7,
     });
 
+    return NextResponse.json({
+      summary: text || "No summary generated.",
+    });
   } catch (error) {
-    console.error(error);
-
-    return NextResponse.json(
-      {
-        summary:
-          "AI service temporarily unavailable.",
-      },
-      {
-        status: 500,
-      }
-    );
+    return createAIErrorResponse(error, {
+      summary: "AI service temporarily unavailable.",
+    });
   }
 }

@@ -1,6 +1,39 @@
-rebase# Firebase Studio
+# Bharat Mantra
 
-This is a NextJS starter in Firebase Studio.
+Next.js app for AI chat, prompt enhancement, document generation, health planning, law explanation, and related productivity tools.
 
-To get started, take a look at src/app/page.tsx.
-PWA enabled
+## AI configuration
+
+Server-side AI features use OpenRouter through `src/lib/deepseek.ts`.
+
+Required environment variable:
+
+```bash
+OPENROUTER_API_KEY=your_openrouter_api_key
+```
+
+Optional environment variables:
+
+```bash
+# One preferred model. Defaults to OpenRouter's free router.
+OPENROUTER_MODEL=openrouter/free
+
+# Comma-separated fallback list. If set, this list is tried in order.
+OPENROUTER_MODELS=openrouter/free,meta-llama/llama-3.3-70b-instruct:free
+
+# Used for OpenRouter app attribution headers.
+NEXT_PUBLIC_APP_URL=https://bharat-mantra.vercel.app
+```
+
+If a selected provider returns `429` rate-limit errors, the app retries the next configured model. If all configured models are rate-limited, the API returns a clear 429 message so the UI can tell users to retry or configure a less-limited/paid model.
+
+## Genkit-style AI layer
+
+The app now routes API prompts through a Genkit-style flow layer:
+
+```ts
+import { ai } from "@/ai/genkit";
+import { z } from "genkit";
+```
+
+`src/ai/flows/generate-text-flow.ts` defines `generateTextFlow` with Zod input/output schemas and all feature API routes call this flow via `generateText(...)`. In this environment, npm registry access to official Genkit packages was blocked, so `genkit` is mapped in `tsconfig.json` to a local compatibility export that provides `z` from `zod`; the runtime `ai` object delegates generation to the existing OpenRouter client.

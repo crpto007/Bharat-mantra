@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { readJsonResponse } from "@/lib/api-client";
 
 export default function Page() {
   const [query, setQuery] = useState("");
@@ -17,11 +18,8 @@ export default function Page() {
         method: "POST",
 
         headers: {
-  Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-  "Content-Type": "application/json",
-  "HTTP-Referer": "https://bharat-mantra.vercel.app",
-  "X-Title": "Bharat Mantra"
-},
+          "Content-Type": "application/json",
+        },
 
         body: JSON.stringify({
           query,
@@ -29,13 +27,17 @@ export default function Page() {
         }),
       });
 
-      const data = await res.json();
+      const data = await readJsonResponse(res);
 
-      setAnalysis(data.analysis);
-    } catch (error) {
+      if (!res.ok) {
+        throw new Error(data.error || data.analysis || "Something went wrong");
+      }
+
+      setAnalysis(data.analysis || "No result generated.");
+    } catch (error: any) {
       console.error(error);
 
-      setAnalysis("Something went wrong.");
+      setAnalysis(error.message || "Something went wrong.");
     } finally {
       setLoading(false);
     }
@@ -44,10 +46,7 @@ export default function Page() {
   return (
     <div className="min-h-screen bg-black text-white p-6">
       <div className="max-w-4xl mx-auto">
-
-        <h1 className="text-4xl font-bold mb-6">
-          Advanced Analysis AI
-        </h1>
+        <h1 className="text-4xl font-bold mb-6">Advanced Analysis AI</h1>
 
         <textarea
           value={query}
@@ -70,7 +69,6 @@ export default function Page() {
             {analysis}
           </div>
         )}
-
       </div>
     </div>
   );
