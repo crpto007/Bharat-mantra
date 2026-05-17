@@ -25,10 +25,19 @@ Instructions:
 - Do not include source URLs
 `;
 
+<<<<<<< HEAD
     const text = await generateAIText(prompt, { temperature: 0.7 });
 
     return NextResponse.json({
       summary: text || "No summary generated.",
+=======
+    const text = await generateAIText(prompt, {
+      temperature: 0.7,
+    });
+
+    return NextResponse.json({
+      summary: text,
+>>>>>>> main
     });
   } catch (error) {
     console.error(error);
@@ -37,8 +46,12 @@ Instructions:
 
     return NextResponse.json(
       {
+<<<<<<< HEAD
         error: message,
         summary: message,
+=======
+        summary: getAIErrorMessage(error),
+>>>>>>> main
       },
       {
         status: 500,

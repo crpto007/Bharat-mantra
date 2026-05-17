@@ -28,10 +28,19 @@ INSTRUCTIONS:
 - Use Hindi if requested
 `;
 
+<<<<<<< HEAD
     const text = await generateAIText(prompt, { temperature: 0.6 });
 
     return NextResponse.json({
       explanation: text || "No explanation generated.",
+=======
+    const text = await generateAIText(prompt, {
+      temperature: 0.6,
+    });
+
+    return NextResponse.json({
+      explanation: text,
+>>>>>>> main
     });
   } catch (error) {
     console.error(error);
@@ -40,8 +49,12 @@ INSTRUCTIONS:
 
     return NextResponse.json(
       {
+<<<<<<< HEAD
         error: message,
         explanation: message,
+=======
+        explanation: getAIErrorMessage(error),
+>>>>>>> main
       },
       {
         status: 500,

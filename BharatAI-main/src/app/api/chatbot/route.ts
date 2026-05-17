@@ -25,6 +25,7 @@ ${body.message}
   } catch (error) {
     console.error(error);
 
+<<<<<<< HEAD
     const message = getAIErrorMessage(error);
 
     return NextResponse.json(
@@ -35,6 +36,15 @@ ${body.message}
       {
         status: 500,
       },
+=======
+    return NextResponse.json(
+      {
+        response: getAIErrorMessage(error),
+      },
+      {
+        status: 500,
+      }
+>>>>>>> main
     );
   }
 }

@@ -22,9 +22,15 @@ export default function Page() {
       const res = await fetch("/api/content-humanizer", {
         method: "POST",
 
+<<<<<<< HEAD
         headers: {
           "Content-Type": "application/json",
         },
+=======
+          headers: {
+            "Content-Type": "application/json",
+          },
+>>>>>>> main
 
         body: JSON.stringify({
           text,

@@ -41,10 +41,19 @@ INSTRUCTIONS:
 - Format cleanly in markdown
 `;
 
+<<<<<<< HEAD
     const text = await generateAIText(prompt, { temperature: 0.7 });
 
     return NextResponse.json({
       plan: text || "No plan generated.",
+=======
+    const text = await generateAIText(prompt, {
+      temperature: 0.7,
+    });
+
+    return NextResponse.json({
+      plan: text,
+>>>>>>> main
     });
   } catch (error) {
     console.error(error);
@@ -53,8 +62,12 @@ INSTRUCTIONS:
 
     return NextResponse.json(
       {
+<<<<<<< HEAD
         error: message,
         plan: message,
+=======
+        plan: getAIErrorMessage(error),
+>>>>>>> main
       },
       {
         status: 500,

@@ -41,9 +41,15 @@ export default function Page() {
       const res = await fetch("/api/law-explainer", {
         method: "POST",
 
+<<<<<<< HEAD
         headers: {
           "Content-Type": "application/json",
         },
+=======
+          headers: {
+            "Content-Type": "application/json",
+          },
+>>>>>>> main
 
         body: JSON.stringify(formData),
       });

@@ -31,10 +31,19 @@ Original Text:
 ${body.text}
 `;
 
+<<<<<<< HEAD
     const text = await generateAIText(prompt, { temperature: 0.8 });
 
     return NextResponse.json({
       humanizedText: text || "No humanized text generated.",
+=======
+    const text = await generateAIText(prompt, {
+      temperature: 0.8,
+    });
+
+    return NextResponse.json({
+      humanizedText: text,
+>>>>>>> main
     });
   } catch (error) {
     console.error(error);
@@ -43,8 +52,12 @@ ${body.text}
 
     return NextResponse.json(
       {
+<<<<<<< HEAD
         error: message,
         humanizedText: message,
+=======
+        humanizedText: getAIErrorMessage(error),
+>>>>>>> main
       },
       {
         status: 500,

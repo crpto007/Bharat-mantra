@@ -27,10 +27,19 @@ Instructions:
 - Ready for practical use
 `;
 
+<<<<<<< HEAD
     const text = await generateAIText(prompt, { temperature: 0.6 });
 
     return NextResponse.json({
       generatedDoc: text || "No document generated.",
+=======
+    const text = await generateAIText(prompt, {
+      temperature: 0.6,
+    });
+
+    return NextResponse.json({
+      generatedDoc: text,
+>>>>>>> main
     });
   } catch (error) {
     console.error(error);
@@ -39,8 +48,12 @@ Instructions:
 
     return NextResponse.json(
       {
+<<<<<<< HEAD
         error: message,
         generatedDoc: message,
+=======
+        generatedDoc: getAIErrorMessage(error),
+>>>>>>> main
       },
       {
         status: 500,

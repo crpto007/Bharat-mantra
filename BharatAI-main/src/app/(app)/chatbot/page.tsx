@@ -17,8 +17,13 @@ export default function ChatbotPage() {
         method: "POST",
 
         headers: {
+<<<<<<< HEAD
           "Content-Type": "application/json",
         },
+=======
+            "Content-Type": "application/json",
+          },
+>>>>>>> main
 
         body: JSON.stringify({
           message,

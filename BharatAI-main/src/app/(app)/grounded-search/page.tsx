@@ -18,8 +18,13 @@ export default function Page() {
         method: "POST",
 
         headers: {
+<<<<<<< HEAD
           "Content-Type": "application/json",
         },
+=======
+            "Content-Type": "application/json",
+          },
+>>>>>>> main
 
         body: JSON.stringify({
           query,

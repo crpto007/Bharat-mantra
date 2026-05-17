@@ -31,10 +31,19 @@ IMPORTANT:
 - Return ONLY the enhanced prompt
 `;
 
+<<<<<<< HEAD
     const text = await generateAIText(prompt, { temperature: 0.7 });
 
     return NextResponse.json({
       enhancedPrompt: text || "No enhanced prompt generated.",
+=======
+    const text = await generateAIText(prompt, {
+      temperature: 0.7,
+    });
+
+    return NextResponse.json({
+      enhancedPrompt: text,
+>>>>>>> main
     });
   } catch (error) {
     console.error(error);
@@ -43,8 +52,12 @@ IMPORTANT:
 
     return NextResponse.json(
       {
+<<<<<<< HEAD
         error: message,
         enhancedPrompt: message,
+=======
+        enhancedPrompt: getAIErrorMessage(error),
+>>>>>>> main
       },
       {
         status: 500,

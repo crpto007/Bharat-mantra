@@ -46,6 +46,7 @@ IMAGE PROMPTS:
 3.
 `;
 
+<<<<<<< HEAD
     const text = await generateAIText(prompt, { temperature: 0.7 });
 
     const outlineMatch = text.match(/OUTLINE:([\s\S]*?)SCRIPT:/);
@@ -53,6 +54,26 @@ IMAGE PROMPTS:
     const scriptMatch = text.match(/SCRIPT:([\s\S]*?)IMAGE PROMPTS:/);
 
     const promptsMatch = text.match(/IMAGE PROMPTS:([\s\S]*)/);
+=======
+    const text = await generateAIText(prompt, {
+      temperature: 0.7,
+    });
+
+    const outlineMatch =
+      text.match(
+        /OUTLINE:([\s\S]*?)SCRIPT:/
+      );
+
+    const scriptMatch =
+      text.match(
+        /SCRIPT:([\s\S]*?)IMAGE PROMPTS:/
+      );
+
+    const promptsMatch =
+      text.match(
+        /IMAGE PROMPTS:([\s\S]*)/
+      );
+>>>>>>> main
 
     const imagePrompts =
       promptsMatch?.[1]
@@ -74,10 +95,14 @@ IMAGE PROMPTS:
 
     return NextResponse.json(
       {
+<<<<<<< HEAD
         error: message,
         outline: message,
         script: "",
         imagePrompts: [],
+=======
+        error: getAIErrorMessage(error),
+>>>>>>> main
       },
       {
         status: 500,

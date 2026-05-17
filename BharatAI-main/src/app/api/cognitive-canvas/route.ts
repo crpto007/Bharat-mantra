@@ -27,7 +27,13 @@ SUGGESTIONS:
 ...
 `;
 
+<<<<<<< HEAD
     const text = await generateAIText(prompt, { temperature: 0.7 });
+=======
+    const text = await generateAIText(prompt, {
+      temperature: 0.7,
+    });
+>>>>>>> main
 
     const parts = text.split("SUGGESTIONS:");
 
@@ -45,8 +51,13 @@ SUGGESTIONS:
 
     return NextResponse.json(
       {
+<<<<<<< HEAD
         error: message,
         organizedContent: message,
+=======
+        organizedContent: getAIErrorMessage(error),
+
+>>>>>>> main
         suggestions: "",
       },
       {
