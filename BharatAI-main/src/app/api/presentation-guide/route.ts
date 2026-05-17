@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { deepseek } from "@/lib/deepseek";
+import { generateAIText, getAIErrorMessage } from "@/lib/deepseek";
 
 export async function POST(req: Request) {
   try {
@@ -46,69 +46,42 @@ IMAGE PROMPTS:
 3.
 `;
 
-    const response =
-      await deepseek.chat.completions.create({
-        model: "meta-llama/llama-3.3-70b-instruct:free",
+    const text = await generateAIText(prompt, { temperature: 0.7 });
 
-        messages: [
-          {
-            role: "user",
-            content: prompt,
-          },
-        ],
+    const outlineMatch = text.match(/OUTLINE:([\s\S]*?)SCRIPT:/);
 
-        temperature: 0.7,
-      });
+    const scriptMatch = text.match(/SCRIPT:([\s\S]*?)IMAGE PROMPTS:/);
 
-    const text =
-      response.choices[0].message.content || "";
-
-    const outlineMatch =
-      text.match(
-        /OUTLINE:([\s\S]*?)SCRIPT:/
-      );
-
-    const scriptMatch =
-      text.match(
-        /SCRIPT:([\s\S]*?)IMAGE PROMPTS:/
-      );
-
-    const promptsMatch =
-      text.match(
-        /IMAGE PROMPTS:([\s\S]*)/
-      );
+    const promptsMatch = text.match(/IMAGE PROMPTS:([\s\S]*)/);
 
     const imagePrompts =
       promptsMatch?.[1]
         ?.split("\n")
         .filter((p) => p.trim())
-        .map((p) =>
-          p.replace(/^\d+\.\s*/, "")
-        ) || [];
+        .map((p) => p.replace(/^\d+\.\s*/, "")) || [];
 
     return NextResponse.json({
-      outline:
-        outlineMatch?.[1]?.trim() ||
-        "No outline generated.",
+      outline: outlineMatch?.[1]?.trim() || "No outline generated.",
 
-      script:
-        scriptMatch?.[1]?.trim() ||
-        "No script generated.",
+      script: scriptMatch?.[1]?.trim() || "No script generated.",
 
       imagePrompts,
     });
-
   } catch (error) {
     console.error(error);
 
+    const message = getAIErrorMessage(error);
+
     return NextResponse.json(
       {
-        error:
-          "AI service temporarily unavailable.",
+        error: message,
+        outline: message,
+        script: "",
+        imagePrompts: [],
       },
       {
         status: 500,
-      }
+      },
     );
   }
 }

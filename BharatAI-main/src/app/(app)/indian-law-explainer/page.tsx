@@ -10,21 +10,17 @@ type LawInput = {
 export default function Page() {
   const [loading, setLoading] = useState(false);
 
-  const [explanation, setExplanation] =
-    useState("");
+  const [explanation, setExplanation] = useState("");
 
-  const [formData, setFormData] =
-    useState<LawInput>({
-      topic: "",
-      targetLanguage: "en",
-    });
+  const [formData, setFormData] = useState<LawInput>({
+    topic: "",
+    targetLanguage: "en",
+  });
 
   const handleChange = (
     e: React.ChangeEvent<
-      HTMLInputElement |
-      HTMLTextAreaElement |
-      HTMLSelectElement
-    >
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
   ) => {
     setFormData({
       ...formData,
@@ -42,37 +38,30 @@ export default function Page() {
       setLoading(true);
       setExplanation("");
 
-      const res = await fetch(
-        "/api/law-explainer",
-        {
-          method: "POST",
+      const res = await fetch("/api/law-explainer", {
+        method: "POST",
 
-          headers: {
-  Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-  "Content-Type": "application/json",
-  "HTTP-Referer": "https://bharat-mantra.vercel.app",
-  "X-Title": "Bharat Mantra"
-},
+        headers: {
+          "Content-Type": "application/json",
+        },
 
-          body: JSON.stringify(formData),
-        }
-      );
+        body: JSON.stringify(formData),
+      });
 
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(
-          data.error || "Something went wrong"
-        );
+        throw new Error(data.error || "Something went wrong");
       }
 
       setExplanation(data.explanation);
-
-    } catch (error: any) {
+    } catch (error) {
       console.error(error);
 
-      alert(error.message);
+      const message =
+        error instanceof Error ? error.message : "Something went wrong.";
 
+      setExplanation(message);
     } finally {
       setLoading(false);
     }
@@ -80,21 +69,14 @@ export default function Page() {
 
   return (
     <div className="min-h-screen bg-black text-white p-6">
-
       <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-8">
-
         {/* LEFT */}
 
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
-
-          <h1 className="text-4xl font-bold mb-6">
-            Indian Law Explainer
-          </h1>
+          <h1 className="text-4xl font-bold mb-6">Indian Law Explainer</h1>
 
           <div className="space-y-5">
-
             <div>
-
               <label className="block mb-2 text-zinc-400">
                 Enter Law / Act / Rule
               </label>
@@ -106,11 +88,9 @@ export default function Page() {
                 placeholder="Example: Article 370, RTI Act, IPC Section 420..."
                 className="w-full h-40 bg-black border border-zinc-700 rounded-xl p-4 outline-none"
               />
-
             </div>
 
             <div>
-
               <label className="block mb-2 text-zinc-400">
                 Select Language
               </label>
@@ -121,16 +101,10 @@ export default function Page() {
                 onChange={handleChange}
                 className="w-full bg-black border border-zinc-700 rounded-xl p-3"
               >
-                <option value="en">
-                  English
-                </option>
+                <option value="en">English</option>
 
-                <option value="hi">
-                  Hindi
-                </option>
-
+                <option value="hi">Hindi</option>
               </select>
-
             </div>
 
             <button
@@ -138,31 +112,21 @@ export default function Page() {
               disabled={loading}
               className="w-full bg-blue-500 hover:bg-blue-600 rounded-xl p-3 text-lg font-semibold"
             >
-              {loading
-                ? "Explaining..."
-                : "Explain Law"}
+              {loading ? "Explaining..." : "Explain Law"}
             </button>
-
           </div>
-
         </div>
 
         {/* RIGHT */}
 
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 overflow-auto">
-
-          <h2 className="text-3xl font-bold mb-4">
-            Detailed Explanation
-          </h2>
+          <h2 className="text-3xl font-bold mb-4">Detailed Explanation</h2>
 
           {explanation ? (
             <div
               className="whitespace-pre-wrap leading-8"
               dangerouslySetInnerHTML={{
-                __html: explanation.replace(
-                  /\n/g,
-                  "<br />"
-                ),
+                __html: explanation.replace(/\n/g, "<br />"),
               }}
             />
           ) : (
@@ -170,11 +134,8 @@ export default function Page() {
               The detailed explanation will appear here ⚖️
             </div>
           )}
-
         </div>
-
       </div>
-
     </div>
   );
 }

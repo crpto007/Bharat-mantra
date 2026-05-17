@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { deepseek } from "@/lib/deepseek";
+import { generateAIText, getAIErrorMessage } from "@/lib/deepseek";
 
 export async function POST(req: Request) {
   try {
@@ -27,21 +27,7 @@ SUGGESTIONS:
 ...
 `;
 
-    const response = await deepseek.chat.completions.create({
-      model: "meta-llama/llama-3.3-70b-instruct:free",
-
-      messages: [
-        {
-          role: "user",
-          content: prompt,
-        },
-      ],
-
-      temperature: 0.7,
-    });
-
-    const text =
-      response.choices[0].message.content || "";
+    const text = await generateAIText(prompt, { temperature: 0.7 });
 
     const parts = text.split("SUGGESTIONS:");
 
@@ -50,22 +36,22 @@ SUGGESTIONS:
         parts[0]?.replace("ORGANIZED CONTENT:", "") ||
         "No organized content generated.",
 
-      suggestions:
-        parts[1] || "No suggestions generated.",
+      suggestions: parts[1] || "No suggestions generated.",
     });
   } catch (error) {
     console.error(error);
 
+    const message = getAIErrorMessage(error);
+
     return NextResponse.json(
       {
-        organizedContent:
-          "AI service temporarily unavailable.",
-
+        error: message,
+        organizedContent: message,
         suggestions: "",
       },
       {
         status: 500,
-      }
+      },
     );
   }
 }

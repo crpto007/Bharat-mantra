@@ -17,11 +17,8 @@ export default function ChatbotPage() {
         method: "POST",
 
         headers: {
-  Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-  "Content-Type": "application/json",
-  "HTTP-Referer": "https://bharat-mantra.vercel.app",
-  "X-Title": "Bharat Mantra"
-},
+          "Content-Type": "application/json",
+        },
 
         body: JSON.stringify({
           message,
@@ -32,11 +29,18 @@ export default function ChatbotPage() {
 
       const data = await res.json();
 
+      if (!res.ok) {
+        throw new Error(data.error || data.response || "Something went wrong");
+      }
+
       setResponse(data.response);
     } catch (error) {
       console.error(error);
 
-      setResponse("Something went wrong.");
+      const message =
+        error instanceof Error ? error.message : "Something went wrong.";
+
+      setResponse(message);
     } finally {
       setLoading(false);
     }
@@ -45,9 +49,7 @@ export default function ChatbotPage() {
   return (
     <div className="min-h-screen bg-black text-white p-6">
       <div className="max-w-2xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6">
-          BharatAI Chatbot
-        </h1>
+        <h1 className="text-3xl font-bold mb-6">BharatAI Chatbot</h1>
 
         <textarea
           value={message}
@@ -67,13 +69,9 @@ export default function ChatbotPage() {
 
         {response && (
           <div className="mt-6 p-4 rounded-lg bg-zinc-900 border border-zinc-700">
-            <h2 className="text-xl font-semibold mb-2">
-              AI Response
-            </h2>
+            <h2 className="text-xl font-semibold mb-2">AI Response</h2>
 
-            <p className="whitespace-pre-wrap">
-              {response}
-            </p>
+            <p className="whitespace-pre-wrap">{response}</p>
           </div>
         )}
       </div>

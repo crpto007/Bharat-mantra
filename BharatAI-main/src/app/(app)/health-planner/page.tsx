@@ -16,22 +16,19 @@ export default function Page() {
 
   const [plan, setPlan] = useState("");
 
-  const [formData, setFormData] =
-    useState<HealthPlannerInput>({
-      goal: "Build Muscle",
-      fitnessLevel: "Beginner",
-      dietaryPreference: "Anything",
-      allergies: "",
-      daysPerWeek: 5,
-      language: "en",
-    });
+  const [formData, setFormData] = useState<HealthPlannerInput>({
+    goal: "Build Muscle",
+    fitnessLevel: "Beginner",
+    dietaryPreference: "Anything",
+    allergies: "",
+    daysPerWeek: 5,
+    language: "en",
+  });
 
   const handleChange = (
     e: React.ChangeEvent<
-      HTMLInputElement |
-      HTMLSelectElement |
-      HTMLTextAreaElement
-    >
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
   ) => {
     setFormData({
       ...formData,
@@ -48,37 +45,30 @@ export default function Page() {
       setLoading(true);
       setPlan("");
 
-      const res = await fetch(
-        "/api/health-planner",
-        {
-          method: "POST",
+      const res = await fetch("/api/health-planner", {
+        method: "POST",
 
-          headers: {
-  Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-  "Content-Type": "application/json",
-  "HTTP-Referer": "https://bharat-mantra.vercel.app",
-  "X-Title": "Bharat Mantra"
-},
+        headers: {
+          "Content-Type": "application/json",
+        },
 
-          body: JSON.stringify(formData),
-        }
-      );
+        body: JSON.stringify(formData),
+      });
 
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(
-          data.error || "Something went wrong"
-        );
+        throw new Error(data.error || "Something went wrong");
       }
 
       setPlan(data.plan);
-
-    } catch (error: any) {
+    } catch (error) {
       console.error(error);
 
-      alert(error.message);
+      const message =
+        error instanceof Error ? error.message : "Something went wrong.";
 
+      setPlan(message);
     } finally {
       setLoading(false);
     }
@@ -86,23 +76,15 @@ export default function Page() {
 
   return (
     <div className="min-h-screen bg-black text-white p-6">
-
       <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-8">
-
         {/* LEFT */}
 
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
-
-          <h1 className="text-4xl font-bold mb-6">
-            AI Health Planner
-          </h1>
+          <h1 className="text-4xl font-bold mb-6">AI Health Planner</h1>
 
           <div className="space-y-5">
-
             <div>
-              <label className="block mb-2">
-                Fitness Goal
-              </label>
+              <label className="block mb-2">Fitness Goal</label>
 
               <select
                 name="goal"
@@ -110,25 +92,16 @@ export default function Page() {
                 onChange={handleChange}
                 className="w-full bg-black border border-zinc-700 rounded-xl p-3"
               >
-                <option>
-                  Lose Weight
-                </option>
+                <option>Lose Weight</option>
 
-                <option>
-                  Build Muscle
-                </option>
+                <option>Build Muscle</option>
 
-                <option>
-                  Maintain Fitness
-                </option>
-
+                <option>Maintain Fitness</option>
               </select>
             </div>
 
             <div>
-              <label className="block mb-2">
-                Fitness Level
-              </label>
+              <label className="block mb-2">Fitness Level</label>
 
               <select
                 name="fitnessLevel"
@@ -136,25 +109,16 @@ export default function Page() {
                 onChange={handleChange}
                 className="w-full bg-black border border-zinc-700 rounded-xl p-3"
               >
-                <option>
-                  Beginner
-                </option>
+                <option>Beginner</option>
 
-                <option>
-                  Intermediate
-                </option>
+                <option>Intermediate</option>
 
-                <option>
-                  Advanced
-                </option>
-
+                <option>Advanced</option>
               </select>
             </div>
 
             <div>
-              <label className="block mb-2">
-                Dietary Preference
-              </label>
+              <label className="block mb-2">Dietary Preference</label>
 
               <select
                 name="dietaryPreference"
@@ -162,33 +126,20 @@ export default function Page() {
                 onChange={handleChange}
                 className="w-full bg-black border border-zinc-700 rounded-xl p-3"
               >
-                <option>
-                  Anything
-                </option>
+                <option>Anything</option>
 
-                <option>
-                  Vegetarian
-                </option>
+                <option>Vegetarian</option>
 
-                <option>
-                  Vegan
-                </option>
+                <option>Vegan</option>
 
-                <option>
-                  Keto
-                </option>
+                <option>Keto</option>
 
-                <option>
-                  Paleo
-                </option>
-
+                <option>Paleo</option>
               </select>
             </div>
 
             <div>
-              <label className="block mb-2">
-                Allergies
-              </label>
+              <label className="block mb-2">Allergies</label>
 
               <textarea
                 name="allergies"
@@ -200,9 +151,7 @@ export default function Page() {
             </div>
 
             <div>
-              <label className="block mb-2">
-                Workout Days
-              </label>
+              <label className="block mb-2">Workout Days</label>
 
               <input
                 type="number"
@@ -216,9 +165,7 @@ export default function Page() {
             </div>
 
             <div>
-              <label className="block mb-2">
-                Language
-              </label>
+              <label className="block mb-2">Language</label>
 
               <select
                 name="language"
@@ -226,14 +173,9 @@ export default function Page() {
                 onChange={handleChange}
                 className="w-full bg-black border border-zinc-700 rounded-xl p-3"
               >
-                <option value="en">
-                  English
-                </option>
+                <option value="en">English</option>
 
-                <option value="hi">
-                  Hindi
-                </option>
-
+                <option value="hi">Hindi</option>
               </select>
             </div>
 
@@ -242,31 +184,21 @@ export default function Page() {
               disabled={loading}
               className="w-full bg-green-500 hover:bg-green-600 rounded-xl p-3 text-lg font-semibold"
             >
-              {loading
-                ? "Generating..."
-                : "Generate Health Plan"}
+              {loading ? "Generating..." : "Generate Health Plan"}
             </button>
-
           </div>
-
         </div>
 
         {/* RIGHT */}
 
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 overflow-auto">
-
-          <h2 className="text-3xl font-bold mb-4">
-            Your Personalized Plan
-          </h2>
+          <h2 className="text-3xl font-bold mb-4">Your Personalized Plan</h2>
 
           {plan ? (
             <div
               className="whitespace-pre-wrap"
               dangerouslySetInnerHTML={{
-                __html: plan.replace(
-                  /\n/g,
-                  "<br />"
-                ),
+                __html: plan.replace(/\n/g, "<br />"),
               }}
             />
           ) : (
@@ -274,11 +206,8 @@ export default function Page() {
               Your AI-generated fitness and meal plan will appear here 🚀
             </div>
           )}
-
         </div>
-
       </div>
-
     </div>
   );
 }

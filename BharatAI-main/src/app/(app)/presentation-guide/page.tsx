@@ -16,35 +16,27 @@ type PresentationGuideOutput = {
 };
 
 export default function Page() {
-  const [loading, setLoading] =
-    useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const [result, setResult] =
-    useState<PresentationGuideOutput | null>(
-      null
-    );
+  const [result, setResult] = useState<PresentationGuideOutput | null>(null);
 
-  const [formData, setFormData] =
-    useState<PresentationGuideInput>({
-      topic: "",
-      audience: "",
-      numberOfSlides: 10,
-      language: "en",
-    });
+  const [formData, setFormData] = useState<PresentationGuideInput>({
+    topic: "",
+    audience: "",
+    numberOfSlides: 10,
+    language: "en",
+  });
 
   const handleChange = (
     e: React.ChangeEvent<
-      HTMLInputElement |
-      HTMLTextAreaElement |
-      HTMLSelectElement
-    >
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
   ) => {
     setFormData({
       ...formData,
 
       [e.target.name]:
-        e.target.name ===
-        "numberOfSlides"
+        e.target.name === "numberOfSlides"
           ? Number(e.target.value)
           : e.target.value,
     });
@@ -53,17 +45,13 @@ export default function Page() {
   async function generatePresentation() {
     try {
       if (!formData.topic.trim()) {
-        alert(
-          "Please enter presentation topic"
-        );
+        alert("Please enter presentation topic");
 
         return;
       }
 
       if (!formData.audience.trim()) {
-        alert(
-          "Please enter target audience"
-        );
+        alert("Please enter target audience");
 
         return;
       }
@@ -71,38 +59,34 @@ export default function Page() {
       setLoading(true);
       setResult(null);
 
-      const res = await fetch(
-        "/api/presentation-guide",
-        {
-          method: "POST",
+      const res = await fetch("/api/presentation-guide", {
+        method: "POST",
 
-          headers: {
-  Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-  "Content-Type": "application/json",
-  "HTTP-Referer": "https://bharat-mantra.vercel.app",
-  "X-Title": "Bharat Mantra"
-},
+        headers: {
+          "Content-Type": "application/json",
+        },
 
-          body: JSON.stringify(formData),
-        }
-      );
+        body: JSON.stringify(formData),
+      });
 
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(
-          data.error ||
-            "Something went wrong"
-        );
+        throw new Error(data.error || "Something went wrong");
       }
 
       setResult(data);
-
-    } catch (error: any) {
+    } catch (error) {
       console.error(error);
 
-      alert(error.message);
+      const message =
+        error instanceof Error ? error.message : "Something went wrong.";
 
+      setResult({
+        outline: message,
+        script: "",
+        imagePrompts: [],
+      });
     } finally {
       setLoading(false);
     }
@@ -110,24 +94,15 @@ export default function Page() {
 
   return (
     <div className="min-h-screen bg-black text-white p-6">
-
       <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-8">
-
         {/* LEFT */}
 
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
-
-          <h1 className="text-4xl font-bold mb-6">
-            AI Presentation Guide
-          </h1>
+          <h1 className="text-4xl font-bold mb-6">AI Presentation Guide</h1>
 
           <div className="space-y-5">
-
             <div>
-
-              <label className="block mb-2">
-                Presentation Topic
-              </label>
+              <label className="block mb-2">Presentation Topic</label>
 
               <input
                 type="text"
@@ -137,14 +112,10 @@ export default function Page() {
                 placeholder="Example: Artificial Intelligence"
                 className="w-full bg-black border border-zinc-700 rounded-xl p-3"
               />
-
             </div>
 
             <div>
-
-              <label className="block mb-2">
-                Target Audience
-              </label>
+              <label className="block mb-2">Target Audience</label>
 
               <input
                 type="text"
@@ -154,34 +125,24 @@ export default function Page() {
                 placeholder="Example: College Students"
                 className="w-full bg-black border border-zinc-700 rounded-xl p-3"
               />
-
             </div>
 
             <div>
-
-              <label className="block mb-2">
-                Number of Slides
-              </label>
+              <label className="block mb-2">Number of Slides</label>
 
               <input
                 type="number"
                 min={5}
                 max={20}
                 name="numberOfSlides"
-                value={
-                  formData.numberOfSlides
-                }
+                value={formData.numberOfSlides}
                 onChange={handleChange}
                 className="w-full bg-black border border-zinc-700 rounded-xl p-3"
               />
-
             </div>
 
             <div>
-
-              <label className="block mb-2">
-                Language
-              </label>
+              <label className="block mb-2">Language</label>
 
               <select
                 name="language"
@@ -189,47 +150,32 @@ export default function Page() {
                 onChange={handleChange}
                 className="w-full bg-black border border-zinc-700 rounded-xl p-3"
               >
-                <option value="en">
-                  English
-                </option>
+                <option value="en">English</option>
 
-                <option value="hi">
-                  Hindi
-                </option>
-
+                <option value="hi">Hindi</option>
               </select>
-
             </div>
 
             <button
-              onClick={
-                generatePresentation
-              }
+              onClick={generatePresentation}
               disabled={loading}
               className="w-full bg-yellow-500 hover:bg-yellow-600 rounded-xl p-3 text-lg font-semibold text-black"
             >
-              {loading
-                ? "Generating..."
-                : "Generate Presentation"}
+              {loading ? "Generating..." : "Generate Presentation"}
             </button>
-
           </div>
-
         </div>
 
         {/* RIGHT */}
 
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 overflow-auto">
-
           {!result ? (
             <div className="text-zinc-500 text-lg">
               Your AI-generated presentation content will appear here 🎤
             </div>
           ) : (
             <div className="space-y-8">
-
               <div>
-
                 <h2 className="text-3xl font-bold mb-4">
                   Presentation Outline
                 </h2>
@@ -237,75 +183,44 @@ export default function Page() {
                 <div
                   className="whitespace-pre-wrap"
                   dangerouslySetInnerHTML={{
-                    __html:
-                      result.outline.replace(
-                        /\n/g,
-                        "<br />"
-                      ),
+                    __html: result.outline.replace(/\n/g, "<br />"),
                   }}
                 />
-
               </div>
 
               <div>
-
-                <h2 className="text-3xl font-bold mb-4">
-                  Full Script
-                </h2>
+                <h2 className="text-3xl font-bold mb-4">Full Script</h2>
 
                 <div
                   className="whitespace-pre-wrap leading-8"
                   dangerouslySetInnerHTML={{
-                    __html:
-                      result.script.replace(
-                        /\n/g,
-                        "<br />"
-                      ),
+                    __html: result.script.replace(/\n/g, "<br />"),
                   }}
                 />
-
               </div>
 
               <div>
-
-                <h2 className="text-3xl font-bold mb-4">
-                  AI Image Prompts
-                </h2>
+                <h2 className="text-3xl font-bold mb-4">AI Image Prompts</h2>
 
                 <div className="space-y-4">
+                  {result.imagePrompts.map((prompt, index) => (
+                    <div
+                      key={index}
+                      className="bg-black border border-zinc-700 rounded-xl p-4"
+                    >
+                      <p className="font-bold mb-2 text-pink-400">
+                        Prompt {index + 1}
+                      </p>
 
-                  {result.imagePrompts.map(
-                    (
-                      prompt,
-                      index
-                    ) => (
-                      <div
-                        key={index}
-                        className="bg-black border border-zinc-700 rounded-xl p-4"
-                      >
-                        <p className="font-bold mb-2 text-pink-400">
-                          Prompt {index + 1}
-                        </p>
-
-                        <p>
-                          {prompt}
-                        </p>
-
-                      </div>
-                    )
-                  )}
-
+                      <p>{prompt}</p>
+                    </div>
+                  ))}
                 </div>
-
               </div>
-
             </div>
           )}
-
         </div>
-
       </div>
-
     </div>
   );
 }
