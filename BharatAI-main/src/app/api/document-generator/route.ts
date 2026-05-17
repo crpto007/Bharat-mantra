@@ -1,63 +1,19 @@
 import { NextResponse } from "next/server";
-import { deepseek } from "@/lib/deepseek";
+import { documentGeneratorFlow } from "@/ai/flows/feature-flows";
+import { createAIErrorResponse } from "@/lib/deepseek";
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    const prompt = `
-You are an AI assistant specialized in legal and formal documents.
-
-Generate a professional and complete:
-
-DOCUMENT TYPE:
-${body.docType}
-
-DOCUMENT DETAILS:
-${body.details}
-
-LANGUAGE:
-${body.language}
-
-Instructions:
-- Create a fully detailed document
-- Use proper formatting
-- Make it professional
-- No explanations outside document
-- Ready for practical use
-`;
-
-    const response =
-      await deepseek.chat.completions.create({
-        model: "meta-llama/llama-3.3-70b-instruct:free",
-
-        messages: [
-          {
-            role: "user",
-            content: prompt,
-          },
-        ],
-
-        temperature: 0.6,
-      });
+    const result = await documentGeneratorFlow(body);
 
     return NextResponse.json({
-      generatedDoc:
-        response.choices[0].message.content ||
-        "No document generated.",
+      generatedDoc: result.text,
     });
-
   } catch (error) {
-    console.error(error);
-
-    return NextResponse.json(
-      {
-        generatedDoc:
-          "AI service temporarily unavailable.",
-      },
-      {
-        status: 500,
-      }
-    );
+    return createAIErrorResponse(error, {
+      generatedDoc: "AI service temporarily unavailable.",
+    });
   }
 }
