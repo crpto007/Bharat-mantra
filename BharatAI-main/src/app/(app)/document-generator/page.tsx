@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { postJson } from "@/lib/api-client";
 
 export default function Page() {
   const [docType, setDocType] = useState("");
@@ -18,34 +19,21 @@ export default function Page() {
     try {
       setLoading(true);
 
-      const res = await fetch(
+      const data = await postJson<{ generatedDoc: string }, Record<string, unknown>>(
         "/api/document-generator",
         {
-          method: "POST",
-
-          headers: {
-  Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-  "Content-Type": "application/json",
-  "HTTP-Referer": "https://bharat-mantra.vercel.app",
-  "X-Title": "Bharat Mantra"
-},
-
-          body: JSON.stringify({
-            docType,
-            details,
-            language: "en",
-          }),
+          docType,
+          details,
+          language: "en",
         }
       );
-
-      const data = await res.json();
 
       setGeneratedDoc(data.generatedDoc);
 
     } catch (error) {
       console.error(error);
 
-      setGeneratedDoc("Something went wrong.");
+      setGeneratedDoc(error instanceof Error ? error.message : "Something went wrong.");
     } finally {
       setLoading(false);
     }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { postJson } from "@/lib/api-client";
 
 export default function Page() {
   const [text, setText] = useState("");
@@ -22,35 +23,22 @@ export default function Page() {
     try {
       setLoading(true);
 
-      const res = await fetch(
+      const data = await postJson<{ humanizedText: string }, Record<string, unknown>>(
         "/api/content-humanizer",
         {
-          method: "POST",
-
-          headers: {
-  Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-  "Content-Type": "application/json",
-  "HTTP-Referer": "https://bharat-mantra.vercel.app",
-  "X-Title": "Bharat Mantra"
-},
-
-          body: JSON.stringify({
-            text,
-            humanizeLevel,
-            outputLength,
-            language: "en",
-          }),
+          text,
+          humanizeLevel,
+          outputLength,
+          language: "en",
         }
       );
-
-      const data = await res.json();
 
       setHumanizedText(data.humanizedText);
 
     } catch (error) {
       console.error(error);
 
-      setHumanizedText("Something went wrong.");
+      setHumanizedText(error instanceof Error ? error.message : "Something went wrong.");
     } finally {
       setLoading(false);
     }

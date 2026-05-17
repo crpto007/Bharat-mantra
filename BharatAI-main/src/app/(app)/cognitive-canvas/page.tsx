@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { postJson } from "@/lib/api-client";
 
 export default function Page() {
   const [rawText, setRawText] = useState("");
@@ -18,26 +19,16 @@ export default function Page() {
     try {
       setLoading(true);
 
-      const res = await fetch(
+      const data = await postJson<
+        { organizedContent: string; suggestions: string },
+        Record<string, unknown>
+      >(
         "/api/cognitive-canvas",
         {
-          method: "POST",
-
-          headers: {
-  Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-  "Content-Type": "application/json",
-  "HTTP-Referer": "https://bharat-mantra.vercel.app",
-  "X-Title": "Bharat Mantra"
-},
-
-          body: JSON.stringify({
-            rawText,
-            language: "en",
-          }),
+          rawText,
+          language: "en",
         }
       );
-
-      const data = await res.json();
 
       setOrganizedContent(data.organizedContent);
       setSuggestions(data.suggestions);
@@ -45,7 +36,7 @@ export default function Page() {
     } catch (error) {
       console.error(error);
 
-      setOrganizedContent("Something went wrong.");
+      setOrganizedContent(error instanceof Error ? error.message : "Something went wrong.");
       setSuggestions("");
     } finally {
       setLoading(false);

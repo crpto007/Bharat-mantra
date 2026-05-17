@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { postJson } from "@/lib/api-client";
 
 type PromptInput = {
   prompt: string;
@@ -46,30 +47,10 @@ export default function Page() {
       setLoading(true);
       setEnhancedPrompt("");
 
-      const res = await fetch(
+      const data = await postJson<{ enhancedPrompt: string }, Record<string, unknown>>(
         "/api/prompt-enhancer",
-        {
-          method: "POST",
-
-          headers: {
-  Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-  "Content-Type": "application/json",
-  "HTTP-Referer": "https://bharat-mantra.vercel.app",
-  "X-Title": "Bharat Mantra"
-},
-
-          body: JSON.stringify(formData),
-        }
+        formData
       );
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(
-          data.error ||
-            "Something went wrong"
-        );
-      }
 
       setEnhancedPrompt(
         data.enhancedPrompt

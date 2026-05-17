@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { postJson } from "@/lib/api-client";
 
 export default function ChatbotPage() {
   const [message, setMessage] = useState("");
@@ -13,30 +14,20 @@ export default function ChatbotPage() {
     try {
       setLoading(true);
 
-      const res = await fetch("/api/chatbot", {
-        method: "POST",
-
-        headers: {
-  Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-  "Content-Type": "application/json",
-  "HTTP-Referer": "https://bharat-mantra.vercel.app",
-  "X-Title": "Bharat Mantra"
-},
-
-        body: JSON.stringify({
+      const data = await postJson<{ response: string }, Record<string, unknown>>(
+        "/api/chatbot",
+        {
           message,
           language: "en",
           context: "",
-        }),
-      });
-
-      const data = await res.json();
+        }
+      );
 
       setResponse(data.response);
     } catch (error) {
       console.error(error);
 
-      setResponse("Something went wrong.");
+      setResponse(error instanceof Error ? error.message : "Something went wrong.");
     } finally {
       setLoading(false);
     }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { postJson } from "@/lib/api-client";
 
 export default function Page() {
   const [query, setQuery] = useState("");
@@ -13,29 +14,19 @@ export default function Page() {
     try {
       setLoading(true);
 
-      const res = await fetch("/api/advanced-analysis", {
-        method: "POST",
-
-        headers: {
-  Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-  "Content-Type": "application/json",
-  "HTTP-Referer": "https://bharat-mantra.vercel.app",
-  "X-Title": "Bharat Mantra"
-},
-
-        body: JSON.stringify({
+      const data = await postJson<{ analysis: string }, Record<string, unknown>>(
+        "/api/advanced-analysis",
+        {
           query,
           language: "en",
-        }),
-      });
-
-      const data = await res.json();
+        }
+      );
 
       setAnalysis(data.analysis);
     } catch (error) {
       console.error(error);
 
-      setAnalysis("Something went wrong.");
+      setAnalysis(error instanceof Error ? error.message : "Something went wrong.");
     } finally {
       setLoading(false);
     }

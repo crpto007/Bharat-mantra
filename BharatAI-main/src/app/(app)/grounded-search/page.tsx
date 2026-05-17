@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { postJson } from "@/lib/api-client";
 
 export default function Page() {
   const [query, setQuery] = useState("");
@@ -14,30 +15,20 @@ export default function Page() {
     try {
       setLoading(true);
 
-      const res = await fetch("/api/grounded-search", {
-        method: "POST",
-
-        headers: {
-  Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-  "Content-Type": "application/json",
-  "HTTP-Referer": "https://bharat-mantra.vercel.app",
-  "X-Title": "Bharat Mantra"
-},
-
-        body: JSON.stringify({
+      const data = await postJson<{ summary: string }, Record<string, unknown>>(
+        "/api/grounded-search",
+        {
           query,
           language,
-        }),
-      });
-
-      const data = await res.json();
+        }
+      );
 
       setSummary(data.summary);
 
     } catch (error) {
       console.error(error);
 
-      setSummary("Something went wrong.");
+      setSummary(error instanceof Error ? error.message : "Something went wrong.");
     } finally {
       setLoading(false);
     }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { postJson } from "@/lib/api-client";
 
 type PresentationGuideInput = {
   topic: string;
@@ -71,30 +72,10 @@ export default function Page() {
       setLoading(true);
       setResult(null);
 
-      const res = await fetch(
+      const data = await postJson<PresentationGuideOutput, PresentationGuideInput>(
         "/api/presentation-guide",
-        {
-          method: "POST",
-
-          headers: {
-  Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-  "Content-Type": "application/json",
-  "HTTP-Referer": "https://bharat-mantra.vercel.app",
-  "X-Title": "Bharat Mantra"
-},
-
-          body: JSON.stringify(formData),
-        }
+        formData
       );
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(
-          data.error ||
-            "Something went wrong"
-        );
-      }
 
       setResult(data);
 

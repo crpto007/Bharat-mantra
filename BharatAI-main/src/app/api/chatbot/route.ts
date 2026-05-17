@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { deepseek } from "@/lib/deepseek";
+import { generateAIText, getAIErrorMessage } from "@/lib/ai";
 
 export async function POST(req: Request) {
   try {
@@ -17,25 +17,24 @@ User message:
 ${body.message}
 `;
 
-    const response = await deepseek.chat.completions.create({
-      model: "meta-llama/llama-3.3-70b-instruct:free",
-
-      messages: [
-        {
-          role: "user",
-          content: prompt,
-        },
-      ],
-    });
+    const text = await generateAIText({ prompt });
 
     return NextResponse.json({
-      response: response.choices[0].message.content,
+      response: text,
     });
   } catch (error) {
     console.error(error);
 
-    return NextResponse.json({
-      response: "Something went wrong.",
-    });
+    const message = getAIErrorMessage(error);
+
+    return NextResponse.json(
+      {
+        error: message,
+        response: message,
+      },
+      {
+        status: 500,
+      }
+    );
   }
 }
