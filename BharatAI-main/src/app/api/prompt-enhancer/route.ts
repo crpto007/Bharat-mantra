@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { generateText } from "@/ai/flows/generate-text-flow";
-import { createAIErrorResponse } from "@/lib/deepseek";
+import { generateAIText, getAIErrorMessage } from "@/lib/deepseek";
 
 export async function POST(req: Request) {
   try {
@@ -31,15 +30,25 @@ IMPORTANT:
 - Keep it professional
 - Return ONLY the enhanced prompt
 `;
-    const text = await generateText({
-      prompt,
+
+    const text = await generateAIText(prompt, {
       temperature: 0.7,
     });
 
     return NextResponse.json({
-      enhancedPrompt: text || "No enhanced prompt generated.",
+      enhancedPrompt: text,
     });
+
   } catch (error) {
-    return createAIErrorResponse(error, {});
+    console.error(error);
+
+    return NextResponse.json(
+      {
+        enhancedPrompt: getAIErrorMessage(error),
+      },
+      {
+        status: 500,
+      }
+    );
   }
 }

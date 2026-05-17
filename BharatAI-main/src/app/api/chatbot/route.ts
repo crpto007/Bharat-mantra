@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { generateText } from "@/ai/flows/generate-text-flow";
-import { createAIErrorResponse } from "@/lib/deepseek";
+import { generateAIText, getAIErrorMessage } from "@/lib/deepseek";
 
 export async function POST(req: Request) {
   try {
@@ -17,14 +16,22 @@ ${body.context || "No previous context"}
 User message:
 ${body.message}
 `;
-    const text = await generateText({
-      prompt,
-    });
+
+    const text = await generateAIText(prompt);
 
     return NextResponse.json({
-      response: text || "No response generated.",
+      response: text,
     });
   } catch (error) {
-    return createAIErrorResponse(error, {});
+    console.error(error);
+
+    return NextResponse.json(
+      {
+        response: getAIErrorMessage(error),
+      },
+      {
+        status: 500,
+      }
+    );
   }
 }

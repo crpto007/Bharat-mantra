@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { readJsonResponse } from "@/lib/api-client";
 
 export default function ChatbotPage() {
   const [message, setMessage] = useState("");
@@ -18,8 +17,8 @@ export default function ChatbotPage() {
         method: "POST",
 
         headers: {
-          "Content-Type": "application/json",
-        },
+            "Content-Type": "application/json",
+          },
 
         body: JSON.stringify({
           message,
@@ -28,17 +27,13 @@ export default function ChatbotPage() {
         }),
       });
 
-      const data = await readJsonResponse(res);
+      const data = await res.json();
 
-      if (!res.ok) {
-        throw new Error(data.error || data.response || "Something went wrong");
-      }
-
-      setResponse(data.response || "No result generated.");
-    } catch (error: any) {
+      setResponse(data.response);
+    } catch (error) {
       console.error(error);
 
-      setResponse(error.message || "Something went wrong.");
+      setResponse("Something went wrong.");
     } finally {
       setLoading(false);
     }
@@ -47,7 +42,9 @@ export default function ChatbotPage() {
   return (
     <div className="min-h-screen bg-black text-white p-6">
       <div className="max-w-2xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6">BharatAI Chatbot</h1>
+        <h1 className="text-3xl font-bold mb-6">
+          BharatAI Chatbot
+        </h1>
 
         <textarea
           value={message}
@@ -67,9 +64,13 @@ export default function ChatbotPage() {
 
         {response && (
           <div className="mt-6 p-4 rounded-lg bg-zinc-900 border border-zinc-700">
-            <h2 className="text-xl font-semibold mb-2">AI Response</h2>
+            <h2 className="text-xl font-semibold mb-2">
+              AI Response
+            </h2>
 
-            <p className="whitespace-pre-wrap">{response}</p>
+            <p className="whitespace-pre-wrap">
+              {response}
+            </p>
           </div>
         )}
       </div>

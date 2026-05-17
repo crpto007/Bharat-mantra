@@ -1,13 +1,15 @@
 import { NextResponse } from "next/server";
-import { generateText } from "@/ai/flows/generate-text-flow";
-import { createAIErrorResponse } from "@/lib/deepseek";
+import { generateAIText, getAIErrorMessage } from "@/lib/deepseek";
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
 
     const documentsText = body.documents
-      .map((doc: string, index: number) => `DOCUMENT ${index + 1}:\n${doc}`)
+      .map(
+        (doc: string, index: number) =>
+          `DOCUMENT ${index + 1}:\n${doc}`
+      )
       .join("\n\n");
 
     const prompt = `
@@ -36,15 +38,25 @@ IMPORTANT INSTRUCTIONS:
 - Match tone according to goal
 - Add conclusion at end
 `;
-    const text = await generateText({
-      prompt,
+
+    const text = await generateAIText(prompt, {
       temperature: 0.7,
     });
 
     return NextResponse.json({
-      synthesizedContent: text || "No content generated.",
+      synthesizedContent: text,
     });
+
   } catch (error) {
-    return createAIErrorResponse(error, {});
+    console.error(error);
+
+    return NextResponse.json(
+      {
+        synthesizedContent: getAIErrorMessage(error),
+      },
+      {
+        status: 500,
+      }
+    );
   }
 }

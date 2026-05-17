@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { readJsonResponse } from "@/lib/api-client";
 
 type PromptInput = {
   prompt: string;
@@ -9,19 +8,26 @@ type PromptInput = {
 };
 
 export default function Page() {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] =
+    useState(false);
 
-  const [enhancedPrompt, setEnhancedPrompt] = useState("");
+  const [enhancedPrompt, setEnhancedPrompt] =
+    useState("");
 
-  const [copied, setCopied] = useState(false);
+  const [copied, setCopied] =
+    useState(false);
 
-  const [formData, setFormData] = useState<PromptInput>({
-    prompt: "",
-    language: "en",
-  });
+  const [formData, setFormData] =
+    useState<PromptInput>({
+      prompt: "",
+      language: "en",
+    });
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement | HTMLSelectElement>,
+    e: React.ChangeEvent<
+      HTMLTextAreaElement |
+      HTMLSelectElement
+    >
   ) => {
     setFormData({
       ...formData,
@@ -40,27 +46,37 @@ export default function Page() {
       setLoading(true);
       setEnhancedPrompt("");
 
-      const res = await fetch("/api/prompt-enhancer", {
-        method: "POST",
+      const res = await fetch(
+        "/api/prompt-enhancer",
+        {
+          method: "POST",
 
-        headers: {
-          "Content-Type": "application/json",
-        },
+          headers: {
+            "Content-Type": "application/json",
+          },
 
-        body: JSON.stringify(formData),
-      });
+          body: JSON.stringify(formData),
+        }
+      );
 
-      const data = await readJsonResponse(res);
+      const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.error || "Something went wrong");
+        throw new Error(
+          data.error ||
+            "Something went wrong"
+        );
       }
 
-      setEnhancedPrompt(data.enhancedPrompt);
+      setEnhancedPrompt(
+        data.enhancedPrompt
+      );
+
     } catch (error: any) {
       console.error(error);
 
       alert(error.message);
+
     } finally {
       setLoading(false);
     }
@@ -68,13 +84,16 @@ export default function Page() {
 
   async function copyToClipboard() {
     try {
-      await navigator.clipboard.writeText(enhancedPrompt);
+      await navigator.clipboard.writeText(
+        enhancedPrompt
+      );
 
       setCopied(true);
 
       setTimeout(() => {
         setCopied(false);
       }, 2000);
+
     } catch (error) {
       console.error(error);
     }
@@ -82,14 +101,21 @@ export default function Page() {
 
   return (
     <div className="min-h-screen bg-black text-white p-6">
+
       <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-8">
+
         {/* LEFT */}
 
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
-          <h1 className="text-4xl font-bold mb-6">AI Prompt Enhancer</h1>
+
+          <h1 className="text-4xl font-bold mb-6">
+            AI Prompt Enhancer
+          </h1>
 
           <div className="space-y-5">
+
             <div>
+
               <label className="block mb-2 text-zinc-400">
                 Original Prompt
               </label>
@@ -101,10 +127,14 @@ export default function Page() {
                 placeholder="Enter your prompt here..."
                 className="w-full h-64 bg-black border border-zinc-700 rounded-xl p-4 outline-none"
               />
+
             </div>
 
             <div>
-              <label className="block mb-2 text-zinc-400">Language</label>
+
+              <label className="block mb-2 text-zinc-400">
+                Language
+              </label>
 
               <select
                 name="language"
@@ -112,10 +142,16 @@ export default function Page() {
                 onChange={handleChange}
                 className="w-full bg-black border border-zinc-700 rounded-xl p-3"
               >
-                <option value="en">English</option>
+                <option value="en">
+                  English
+                </option>
 
-                <option value="hi">Hindi</option>
+                <option value="hi">
+                  Hindi
+                </option>
+
               </select>
+
             </div>
 
             <button
@@ -123,25 +159,36 @@ export default function Page() {
               disabled={loading}
               className="w-full bg-cyan-500 hover:bg-cyan-600 rounded-xl p-3 text-lg font-semibold text-black"
             >
-              {loading ? "Enhancing..." : "Enhance Prompt"}
+              {loading
+                ? "Enhancing..."
+                : "Enhance Prompt"}
             </button>
+
           </div>
+
         </div>
 
         {/* RIGHT */}
 
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 overflow-auto">
+
           <div className="flex items-center justify-between mb-5">
-            <h2 className="text-3xl font-bold">Enhanced Prompt</h2>
+
+            <h2 className="text-3xl font-bold">
+              Enhanced Prompt
+            </h2>
 
             {enhancedPrompt && (
               <button
                 onClick={copyToClipboard}
                 className="bg-cyan-500 hover:bg-cyan-600 text-black px-4 py-2 rounded-lg font-semibold"
               >
-                {copied ? "Copied" : "Copy"}
+                {copied
+                  ? "Copied"
+                  : "Copy"}
               </button>
             )}
+
           </div>
 
           {enhancedPrompt ? (
@@ -153,8 +200,11 @@ export default function Page() {
               Your enhanced AI prompt will appear here ✨
             </div>
           )}
+
         </div>
+
       </div>
+
     </div>
   );
 }

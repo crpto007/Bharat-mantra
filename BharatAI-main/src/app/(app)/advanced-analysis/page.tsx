@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { readJsonResponse } from "@/lib/api-client";
 
 export default function Page() {
   const [query, setQuery] = useState("");
@@ -18,8 +17,8 @@ export default function Page() {
         method: "POST",
 
         headers: {
-          "Content-Type": "application/json",
-        },
+            "Content-Type": "application/json",
+          },
 
         body: JSON.stringify({
           query,
@@ -27,17 +26,13 @@ export default function Page() {
         }),
       });
 
-      const data = await readJsonResponse(res);
+      const data = await res.json();
 
-      if (!res.ok) {
-        throw new Error(data.error || data.analysis || "Something went wrong");
-      }
-
-      setAnalysis(data.analysis || "No result generated.");
-    } catch (error: any) {
+      setAnalysis(data.analysis);
+    } catch (error) {
       console.error(error);
 
-      setAnalysis(error.message || "Something went wrong.");
+      setAnalysis("Something went wrong.");
     } finally {
       setLoading(false);
     }
@@ -46,7 +41,10 @@ export default function Page() {
   return (
     <div className="min-h-screen bg-black text-white p-6">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold mb-6">Advanced Analysis AI</h1>
+
+        <h1 className="text-4xl font-bold mb-6">
+          Advanced Analysis AI
+        </h1>
 
         <textarea
           value={query}
@@ -69,6 +67,7 @@ export default function Page() {
             {analysis}
           </div>
         )}
+
       </div>
     </div>
   );

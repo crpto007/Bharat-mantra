@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { generateText } from "@/ai/flows/generate-text-flow";
-import { createAIErrorResponse } from "@/lib/deepseek";
+import { generateAIText, getAIErrorMessage } from "@/lib/deepseek";
 
 export async function POST(req: Request) {
   try {
@@ -27,26 +26,33 @@ ORGANIZED CONTENT:
 SUGGESTIONS:
 ...
 `;
-    const text = await generateText({
-      prompt,
+
+    const text = await generateAIText(prompt, {
       temperature: 0.7,
     });
 
-    const formattedText = text || "";
-
-    const parts = formattedText.split("SUGGESTIONS:");
+    const parts = text.split("SUGGESTIONS:");
 
     return NextResponse.json({
       organizedContent:
         parts[0]?.replace("ORGANIZED CONTENT:", "") ||
         "No organized content generated.",
 
-      suggestions: parts[1] || "No suggestions generated.",
+      suggestions:
+        parts[1] || "No suggestions generated.",
     });
   } catch (error) {
-    return createAIErrorResponse(error, {
-      organizedContent: "AI service temporarily unavailable.",
-      suggestions: "",
-    });
+    console.error(error);
+
+    return NextResponse.json(
+      {
+        organizedContent: getAIErrorMessage(error),
+
+        suggestions: "",
+      },
+      {
+        status: 500,
+      }
+    );
   }
 }

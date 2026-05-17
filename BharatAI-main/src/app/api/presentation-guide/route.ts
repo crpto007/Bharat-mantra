@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { generateText } from "@/ai/flows/generate-text-flow";
-import { createAIErrorResponse } from "@/lib/deepseek";
+import { generateAIText, getAIErrorMessage } from "@/lib/deepseek";
 
 export async function POST(req: Request) {
   try {
@@ -46,33 +45,56 @@ IMAGE PROMPTS:
 2.
 3.
 `;
-    const text = await generateText({
-      prompt,
+
+    const text = await generateAIText(prompt, {
       temperature: 0.7,
     });
 
-    const formattedText = text || "";
+    const outlineMatch =
+      text.match(
+        /OUTLINE:([\s\S]*?)SCRIPT:/
+      );
 
-    const outlineMatch = formattedText.match(/OUTLINE:([\s\S]*?)SCRIPT:/);
+    const scriptMatch =
+      text.match(
+        /SCRIPT:([\s\S]*?)IMAGE PROMPTS:/
+      );
 
-    const scriptMatch = formattedText.match(/SCRIPT:([\s\S]*?)IMAGE PROMPTS:/);
-
-    const promptsMatch = formattedText.match(/IMAGE PROMPTS:([\s\S]*)/);
+    const promptsMatch =
+      text.match(
+        /IMAGE PROMPTS:([\s\S]*)/
+      );
 
     const imagePrompts =
       promptsMatch?.[1]
         ?.split("\n")
-        .filter((p: string) => p.trim())
-        .map((p: string) => p.replace(/^\d+\.\s*/, "")) || [];
+        .filter((p) => p.trim())
+        .map((p) =>
+          p.replace(/^\d+\.\s*/, "")
+        ) || [];
 
     return NextResponse.json({
-      outline: outlineMatch?.[1]?.trim() || "No outline generated.",
+      outline:
+        outlineMatch?.[1]?.trim() ||
+        "No outline generated.",
 
-      script: scriptMatch?.[1]?.trim() || "No script generated.",
+      script:
+        scriptMatch?.[1]?.trim() ||
+        "No script generated.",
 
       imagePrompts,
     });
+
   } catch (error) {
-    return createAIErrorResponse(error, {});
+    console.error(error);
+
+    return NextResponse.json(
+      {
+        error: getAIErrorMessage(error),
+      },
+      {
+        status: 500,
+      }
+    );
   }
 }

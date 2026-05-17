@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { readJsonResponse } from "@/lib/api-client";
 
 export default function Page() {
   const [query, setQuery] = useState("");
@@ -19,8 +18,8 @@ export default function Page() {
         method: "POST",
 
         headers: {
-          "Content-Type": "application/json",
-        },
+            "Content-Type": "application/json",
+          },
 
         body: JSON.stringify({
           query,
@@ -28,17 +27,14 @@ export default function Page() {
         }),
       });
 
-      const data = await readJsonResponse(res);
+      const data = await res.json();
 
-      if (!res.ok) {
-        throw new Error(data.error || data.summary || "Something went wrong");
-      }
+      setSummary(data.summary);
 
-      setSummary(data.summary || "No result generated.");
-    } catch (error: any) {
+    } catch (error) {
       console.error(error);
 
-      setSummary(error.message || "Something went wrong.");
+      setSummary("Something went wrong.");
     } finally {
       setLoading(false);
     }
@@ -74,32 +70,52 @@ export default function Page() {
   return (
     <div className="min-h-screen bg-black text-white p-6">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-bold mb-8">Knowledge Explorer</h1>
+
+        <h1 className="text-4xl font-bold mb-8">
+          Knowledge Explorer
+        </h1>
 
         <div className="grid lg:grid-cols-2 gap-6">
+
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
-            <h2 className="text-2xl font-semibold mb-4">Topic Input</h2>
+
+            <h2 className="text-2xl font-semibold mb-4">
+              Topic Input
+            </h2>
 
             <input
               type="text"
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={(e) =>
+                setQuery(e.target.value)
+              }
               placeholder="Enter topic or question..."
               className="w-full p-4 rounded-lg bg-black border border-zinc-700 outline-none"
             />
 
             <div className="mt-6">
-              <label className="block mb-2">Language</label>
+
+              <label className="block mb-2">
+                Language
+              </label>
 
               <select
                 value={language}
-                onChange={(e) => setLanguage(e.target.value)}
+                onChange={(e) =>
+                  setLanguage(e.target.value)
+                }
                 className="w-full p-3 rounded-lg bg-black border border-zinc-700"
               >
-                <option value="en">English</option>
+                <option value="en">
+                  English
+                </option>
 
-                <option value="hi">Hindi</option>
+                <option value="hi">
+                  Hindi
+                </option>
+
               </select>
+
             </div>
 
             <button
@@ -107,15 +123,23 @@ export default function Page() {
               disabled={loading}
               className="w-full mt-6 px-6 py-3 bg-blue-600 rounded-lg hover:bg-blue-700 transition"
             >
-              {loading ? "Generating..." : "Generate Summary"}
+              {loading
+                ? "Generating..."
+                : "Generate Summary"}
             </button>
+
           </div>
 
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-semibold">Generated Summary</h2>
+
+              <h2 className="text-2xl font-semibold">
+                Generated Summary
+              </h2>
 
               <div className="flex gap-2">
+
                 <button
                   onClick={handleCopy}
                   disabled={!summary}
@@ -131,7 +155,9 @@ export default function Page() {
                 >
                   Download
                 </button>
+
               </div>
+
             </div>
 
             {loading ? (
@@ -151,8 +177,11 @@ export default function Page() {
                 </p>
               </div>
             )}
+
           </div>
+
         </div>
+
       </div>
     </div>
   );
