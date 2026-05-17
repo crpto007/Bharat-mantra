@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
-import { deepseek } from "@/lib/deepseek";
+import {
+  generateAIText,
+  getAIErrorMessage,
+  getAIErrorStatus,
+} from "@/lib/deepseek";
 
 export async function POST(req: Request) {
   try {
@@ -27,38 +31,24 @@ INSTRUCTIONS:
 - Use detailed explanation
 - Use Hindi if requested
 `;
-
-    const response =
-      await deepseek.chat.completions.create({
-        model: "meta-llama/llama-3.3-70b-instruct:free",
-
-        messages: [
-          {
-            role: "user",
-            content: prompt,
-          },
-        ],
-
-        temperature: 0.6,
-      });
-
-    return NextResponse.json({
-      explanation:
-        response.choices[0].message.content ||
-        "No explanation generated.",
+    const text = await generateAIText({
+      prompt,
+      temperature: 0.6,
     });
 
+    return NextResponse.json({
+      explanation: text || "No explanation generated.",
+    });
   } catch (error) {
     console.error(error);
 
     return NextResponse.json(
       {
-        error:
-          "AI service temporarily unavailable.",
+        error: getAIErrorMessage(error),
       },
       {
-        status: 500,
-      }
+        status: getAIErrorStatus(error),
+      },
     );
   }
 }

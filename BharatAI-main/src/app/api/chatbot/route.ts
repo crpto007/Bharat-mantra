@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
-import { deepseek } from "@/lib/deepseek";
+import {
+  generateAIText,
+  getAIErrorMessage,
+  getAIErrorStatus,
+} from "@/lib/deepseek";
 
 export async function POST(req: Request) {
   try {
@@ -16,26 +20,23 @@ ${body.context || "No previous context"}
 User message:
 ${body.message}
 `;
-
-    const response = await deepseek.chat.completions.create({
-      model: "meta-llama/llama-3.3-70b-instruct:free",
-
-      messages: [
-        {
-          role: "user",
-          content: prompt,
-        },
-      ],
+    const text = await generateAIText({
+      prompt,
     });
 
     return NextResponse.json({
-      response: response.choices[0].message.content,
+      response: text || "No response generated.",
     });
   } catch (error) {
     console.error(error);
 
-    return NextResponse.json({
-      response: "Something went wrong.",
-    });
+    return NextResponse.json(
+      {
+        error: getAIErrorMessage(error),
+      },
+      {
+        status: getAIErrorStatus(error),
+      },
+    );
   }
 }
