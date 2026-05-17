@@ -1,15 +1,12 @@
 import { NextResponse } from "next/server";
-import { deepseek } from "@/lib/deepseek";
+import { createAIErrorResponse, generateAIText } from "@/lib/deepseek";
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
 
     const documentsText = body.documents
-      .map(
-        (doc: string, index: number) =>
-          `DOCUMENT ${index + 1}:\n${doc}`
-      )
+      .map((doc: string, index: number) => `DOCUMENT ${index + 1}:\n${doc}`)
       .join("\n\n");
 
     const prompt = `
@@ -38,38 +35,17 @@ IMPORTANT INSTRUCTIONS:
 - Match tone according to goal
 - Add conclusion at end
 `;
-
-    const response =
-      await deepseek.chat.completions.create({
-        model: "meta-llama/llama-3.3-70b-instruct:free",
-
-        messages: [
-          {
-            role: "user",
-            content: prompt,
-          },
-        ],
-
-        temperature: 0.7,
-      });
-
-    return NextResponse.json({
-      synthesizedContent:
-        response.choices[0].message.content ||
-        "No content generated.",
+    const text = await generateAIText({
+      prompt,
+      temperature: 0.7,
     });
 
+    return NextResponse.json({
+      synthesizedContent: text || "No content generated.",
+    });
   } catch (error) {
     console.error(error);
 
-    return NextResponse.json(
-      {
-        error:
-          "AI service temporarily unavailable.",
-      },
-      {
-        status: 500,
-      }
-    );
+    return createAIErrorResponse(error, {});
   }
 }
