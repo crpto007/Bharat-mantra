@@ -1,0 +1,109 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+
+    /* Glassmorphism settings */
+    --card: 220 10% 10% / 0.2; /* More transparent */
+    --card-foreground: 0 0% 98%;
+
+    --popover: 220 10% 8% / 0.4; /* More transparent */
+    --popover-foreground: 0 0% 98%;
+
+    --primary-hue: 265;
+    --primary-saturation: 89%;
+    --primary-lightness: 60%;
+    --primary: var(--primary-hue) var(--primary-saturation) var(--primary-lightness);
+    --primary-foreground: 265 90% 95%;
+
+    --secondary: 240 3.7% 15.9% / 0.3; /* More transparent */
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 240 3.7% 15.9% / 0.2; /* More transparent */
+    --muted-foreground: 240 5% 75%; /* Brighter for better contrast on glass */
+
+    --accent-hue: 217;
+    --accent-saturation: 91%;
+    --accent-lightness: 60%;
+    --accent: var(--accent-hue) var(--accent-saturation) var(--accent-lightness);
+    --accent-foreground: 217 90% 95%;
+
+    --destructive: 0 63% 31% / 0.5; /* More transparent */
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 240 5% 90% / 0.1; /* Very subtle white border */
+    --input: 240 5% 90% / 0.1;  /* More transparent input */
+    --ring: 265 89% 65%;
+    
+    --radius: 0.75rem;
+    
+    --sidebar-background: 240 10% 5% / 0.2; /* More transparent Glassy sidebar */
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-border: 240 5% 90% / 0.1;
+    --sidebar-primary: var(--primary-hue) var(--primary-saturation) var(--primary-lightness);
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 5% 90% / 0.1; /* Subtle accent for hover */
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-ring: 262 82% 56%;
+  }
+
+  .dark {
+    /* Using root as the only theme for consistency */
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+
+    --card: 220 10% 10% / 0.2;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 220 10% 8% / 0.4;
+    --popover-foreground: 0 0% 98%;
+
+    --primary-hue: 265;
+    --primary-saturation: 89%;
+    --primary-lightness: 60%;
+    --primary: var(--primary-hue) var(--primary-saturation) var(--primary-lightness);
+    --primary-foreground: 265 90% 95%;
+
+    --secondary: 240 3.7% 15.9% / 0.3;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 240 3.7% 15.9% / 0.2;
+    --muted-foreground: 240 5% 75%;
+
+    --accent-hue: 217;
+    --accent-saturation: 91%;
+    --accent-lightness: 60%;
+    --accent: var(--accent-hue) var(--accent-saturation) var(--accent-lightness);
+    --accent-foreground: 217 90% 95%;
+
+    --destructive: 0 63% 31% / 0.5;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 240 5% 90% / 0.1;
+    --input: 240 5% 90% / 0.1;
+    --ring: 265 89% 65%;
+    
+    --sidebar-background: 240 10% 5% / 0.2;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-border: 240 5% 90% / 0.1;
+    --sidebar-primary: var(--primary-hue) var(--primary-saturation) var(--primary-lightness);
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 5% 90% / 0.1;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-ring: 262 82% 56%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}

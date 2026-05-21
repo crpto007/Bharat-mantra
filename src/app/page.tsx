@@ -1,0 +1,98 @@
+"use client";
+
+import { categorizedFeatures } from "@/lib/menu-items";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { ArrowRight, CheckCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+
+export default function Page() {
+  const router = useRouter();
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.5,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, x: -20 },
+    visible: { opacity: 1, x: 0 },
+  };
+
+
+  return (
+    <div className="relative min-h-screen overflow-x-hidden">
+        <div className="absolute inset-0 -z-10 h-full w-full bg-black bg-[linear-gradient(to_right,#161616_1px,transparent_1px),linear-gradient(to_bottom,#161616_1px,transparent_1px)] bg-[size:4rem_4rem]"/>
+        <div className="absolute top-0 z-[-2] h-screen w-screen bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,hsl(var(--primary)/0.15),rgba(255,255,255,0))]"></div>
+      
+      <div className="container mx-auto grid min-h-screen grid-cols-1 items-center gap-12 px-4 py-24 md:grid-cols-2 md:py-32">
+        <div className="flex flex-col items-center text-center md:items-start md:text-left">
+          <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5}}
+              className="flex items-center gap-4"
+          >
+            <Image src="/icons/logo.png" alt="PragyanAI Logo" width={80} height={80} priority style={{ height: 'auto' }} />
+          </motion.div>
+          <motion.h1
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="mt-6 font-headline text-5xl font-bold tracking-tighter text-white sm:text-6xl md:text-7xl"
+          >
+            PragyanAI
+          </motion.h1>
+          <motion.p
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="mt-4 max-w-lg text-lg text-muted-foreground sm:text-xl"
+          >
+            Transform your scattered notes, complex laws, and raw data into clear, actionable intelligence.
+          </motion.p>
+          <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="mt-8"
+          >
+              <Button size="lg" onClick={() => router.push('/dashboard')}>
+                  Explore Features <ArrowRight className="ml-2"/>
+              </Button>
+          </motion.div>
+        </div>
+
+        <motion.div 
+            className="rounded-xl border bg-card p-8 backdrop-blur-xl shadow-2xl shadow-black/50"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+        >
+            <h2 className="text-2xl font-semibold text-white">Unlock Your Potential</h2>
+            <p className="mt-2 text-muted-foreground">From analysis to content creation, PragyanAI has you covered.</p>
+            <ul className="mt-6 space-y-4">
+                 {categorizedFeatures.flatMap(c => c.features).slice(0, 5).map((feature) => (
+                     <motion.li key={feature.label} variants={itemVariants} className="flex items-center gap-3">
+                         <CheckCircle className="h-5 w-5 text-primary"/>
+                         <span className="text-white/90">{feature.label}</span>
+                     </motion.li>
+                 ))}
+                 <motion.li variants={itemVariants} className="flex items-center gap-3">
+                    <CheckCircle className="h-5 w-5 text-primary"/>
+                    <span className="text-white/90">And many more...</span>
+                 </motion.li>
+            </ul>
+        </motion.div>
+
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,6 @@
+{
+  "appId": "com.pragyanai.app",
+  "appName": "PragyanAI",
+  "webDir": "out",
+  "bundledWebRuntime": false
+}
